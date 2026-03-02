@@ -3,11 +3,14 @@ project:
 
 website:
   title: "webinaire_arrow"
-  navbar:
-    left:
+  sidebar:
+    style: "floating"
+    contents:
       - href: index.qmd
         text: Home
-      - format_r.qmd
+      - href: format_r.qmd
+        text: Formats R vs arrow
+    search: false
 
 format:
   html:
@@ -16,6 +19,5 @@ format:
       - brand
     css: styles.css
     toc: true
-
 
 

@@ -4,16 +4,201 @@ title: "Le format de données arrow et le format de données R"
 
 Le format arrow a des [spécifications](https://arrow.apache.org/docs/format/Columnar.html) qui permettent aux différentes librairies de communiquer sans avoir à faire de conversion. Ce spécifications correspondent à des exigences de compatibilités et des propositions de fonctionnalités, mais nous allons vérifier ici quels formats de données sont utilisés par le package `arrow` et les comparer à ce qui est fait dans R.
 
-## Vecteur character arrow vs R
+# Vecteur booléen
 
-### Sous R
+## Sous R
+
+Un vecteur booléen dans R est, en interne, un vecteur d'entiers de taille 32 bits. Ce format n'est vraiment pas économe en taille. Nous gâchons `2^32 = 4 294 967 296` modalités possibles pour écrire des données qui n'utilisent que 3 modalités.
+
+```{r}
+v <- c(TRUE, TRUE, NA, FALSE, FALSE, NA, TRUE, TRUE, TRUE)
+
+library(inline)
+code <- "
+SEXP res = PROTECT(NEW_RAW(4));
+uint32_t val = LOGICAL(x)[INTEGER(i)[0]];
+memcpy(RAW(res), &val, 4);
+UNPROTECT(1);
+return res;
+"
+get_value <- cfunction(signature(x = "character", i = "integer"), code, includes = "#include <stdint.h>")
+
+get_value(v, 0L)
+get_value(v, 1L)
+get_value(v, 2L)
+get_value(v, 3L)
+get_value(v, 4L)
+get_value(v, 5L)
+get_value(v, 6L)
+get_value(v, 7L)
+get_value(v, 8L)
+```
+
+Nous vérifions bien avec le code ci-dessus que les vecteurs booléens de R utilisent 4 octets :
+
+* Les valeurs `TRUE` sont représentées par `r get_value(v, 0L)`.
+* Les valeurs `FALSE` sont représentées par `r get_value(v, 3L)`.
+* Les valeurs `NA` sont représentées par `r get_value(v, 2L)`.
+
+Et il y a beaucoup de bits inutiles...
+
+```{r}
+object.size(rep(v, 10000L)) / 10000L # 9 * 4 bytes de uint32
+```
+
+La taille du vecteur v est de 36 octets, car il contient 9 booléens représentés sous formes d'entiers 32 bits (4 octets).
+
+## Sous Arrow
+
+Sous `arrow`, les vecteurs booléens sont représentés par deux buffers bit par bit.
+
+```{r}
+library(arrow)
+donnees <- arrow_array(v)
+d <- donnees$data()
+buff1 <- d$buffers[[1L]]$data()
+buff2 <- d$buffers[[2L]]$data()
+
+buff1
+# 1101 1011 0000 0001
+# 0000 0001 1101 1011 en inversant le little endian
+# Emplacement (en partant de la droite) des valeurs non nulles.
+buff2
+# 1100 0011 0000 0001
+# 0000 0001 1100 0011 en inversant le little endian
+# Emplacement des valeurs positives.
+```
+
+Nous pouvons observer le contenu des deux buffers :
+
+* `buff1` contient `r buff1`. Cela correspond à `1101 1011 0000 0001` en binaire, soit `0000 0001 1101 1011` en convention little-endian (inversion de l'ordre des octets). Nous pouvons retrouver, en partant de la droite, l'emplacement des valeurs non-nulles.
+* `buff2` contient `r buff2`. Cela correspond à `1100 0011 0000 0001` en binaire, soit `0000 0001 1100 0011` en convention little-endian. Nous pouvons retrouver, en partant de la droite, l'emplacement des valeurs positives.
+
+Il apparaît immédiatement que ce format de données est plus économe.
+
+```{r}
+arrow_array(rep(v, 10000L))$nbytes() / 10000L
+# 2,250 bytes
+# 9/8 de byte pour les NA
+# 9/8 de byte pour les TRUE/FALSE
+```
+
+Ici nous obtenons un vecteur de 2,250 octet. En effet. Il y a 9 valeurs représentées chacune par un bit (donc un huitième d'octet) de valeurs non-nulles et un bit de valeurs positives.
+
+## Conclusion
+
+Lorsque l'on s'attarde sur les vecteurs booléens, arrow est clairement meilleur que R avec son format bitwise !
+
+# Vecteur entier
+
+## Sous R
+
+Un vecteur `integer` sous R correspond à un simple array d'int32 en C.
+
+```{r}
+v <- c(-1L, 10L, NA_integer_, -27000L, 42L, NA_integer_)
+
+code <- "
+SEXP res = PROTECT(NEW_RAW(4));
+uint32_t val = INTEGER(x)[INTEGER(i)[0]];
+memcpy(RAW(res), &val, 4);
+UNPROTECT(1);
+return res;
+"
+get_value <- cfunction(signature(x = "character", i = "integer"), code, includes = "#include <stdint.h>")
+
+get_value(v, 0L)
+get_value(v, 1L)
+get_value(v, 2L)
+get_value(v, 3L)
+get_value(v, 4L)
+get_value(v, 5L)
+```
+
+Comme on le voit ci-dessus, la représentation est celle d'un classique int32 avec un [complément à deux](https://fr.wikipedia.org/wiki/Compl%C3%A9ment_%C3%A0_deux). Les octets sont à lire de gauche à droite (et non de droite à gauche comme les nombres arithmétiques) car la plupart des architectures modernes sont little-endian. On note que la valeur correspondant à `NA_integer_` est `r get_value(v, 5L)`. Cette valeur correspond au nombre entier `−2147483648`, qui est normalement le plus petit nombre négatif qui peut être obtenu sur 32 bits.
+
+::: {.callout-note}
+
+Si on tape `-2147483648L` dans une console R, il y a un warning, et le type de données utilisées devient un double. En effet, comme on l'a vu, cette valeur est déjà utilisée pour représenter le `NA_integer_`. Le plus petit entier dans R est donc `-2147483647L`.
+
+:::
+
+```{r}
+object.size(rep(v, 10000L)) / 10000L # 6 * 4 bytes de int32
+```
+
+La taille du vecteur v est de 24 octets, car il contient 6 entier 32 bits.
+
+## Sous Arrow
+
+```{r}
+donnees <- arrow_array(v)
+d <- donnees$data()
+buff1 <- d$buffers[[1L]]$data()
+buff2 <- d$buffers[[2L]]$data()
+
+buff1
+# 1101 1011 0000 0001
+# 0000 0001 1101 1011 en inversant le little endian
+# Emplacement (en partant de la droite) des valeurs non nulles.
+buff2
+# 1100 0011 0000 0001
+# 0000 0001 1100 0011 en inversant le little endian
+# Emplacement des valeurs positives.
+```
+
+Nous pouvons observer le contenu des deux buffers :
+
+* `buff1` contient `r buff1`. Cela correspond à `0001 1011` en binaire. On retrouve, comme pour les booléens, un masque bit par bit qui représente les valeurs non-NA.
+* `buff2` contient `r buff2`. Cela correspond, exactement comme dans R, à un array d'entiers 32 bits signés représentés en complément à deux.
+
+```{r}
+arrow_array(rep(v, 10000L))$nbytes() / 10000L
+# 24,75 bytes
+# 6 * 4 bytes de int32
+# 6/8 de byte pour indiquer les valeurs non NA
+```
+
+Ici nous obtenons un vecteur de 24,75 octet. C'est légèrement supérieur à la représentation R.
+
+::: {.callout-note}
+
+```{r}
+arrow_array(Scalar$create(-2147483647L, type = int32()) - 1, type = int32())
+```
+
+La valeur non-NA -2147483648 peut être représentée en int32 sous arrow, alors qu'elle ne peut pas l'être sous R.
+
+:::
+
+::: {.callout-tip}
+
+```{r}
+v <- c(-1L, 10L, 2L, 21L)
+arrow_array(v, type = int8())
+```
+
+Comme sous d'autres écosystèmes tels que *numpy*, `arrow` permet de choisir des entiers d'autres tailles que 32 bits, ce qui n'est pas permis sous R.
+
+L'on peut ainsi, par exemple, choisir des petits entiers `int8()` (entiers signés de -128 à 127) ou `uint8()` (entiers positifs de 0 à 255), tant pour optimiser la taille que pour permettre aux optimisations SIMD d'accélerer le traitement. En effet, une instruction SIMD sur des entiers 8 bits prendra 4 fois mois de temps que sur des entiers 32 bits.
+
+À l'inverse, on peut également utiliser des `int64()` ou des `uint64()` si les données manipulées ne tiennent pas sur des entiers 32 bits.
+
+:::
+
+## Conclusion
+
+Lorsque l'on s'attarde sur les vecteurs booléens, arrow et R sont très comparables et correspondent essentiellement en des array d'entiers. Cependant, contrairement à R, arrow permet de choisir des entiers de tailles différentes de 32 bits.
+
+# Vecteur character
+
+## Sous R
 
 Un vecteur `character` sous R est, en interne, un pointeur vers la *global string pool*, à savoir un répertoire de chaînes de caractères. La global string pool est alimentée de manière dynamique. Cette représentation a l'avantage de la déduplication, ce qui est pertinent en statistiques dans lesquelles les répétitions sont fréquentes.
 
 ```{r}
 v <- c("arnaud", "arnaud", "titouan",NA_character_, "titouan")
 
-library(inline)
 code <- "
 uintptr_t addr = (uintptr_t)CHAR(STRING_ELT(x, INTEGER(i)[0]));
 SEXP res = PROTECT(R_MakeExternalPtr((void*)addr, R_NilValue, R_NilValue));
@@ -63,10 +248,9 @@ La taille observée du vecteur character en mémoire est de `r capture.output(pr
 
 Cela correspond à `5 * 8 = 40` octets issus des pointeurs (en architecture 64 bits, chaque pointeur correspond à 8 octets et nous avons 5 valeurs). Les 7 octets issus de la string `"arnaud"` (6 caractères plus un `"\0"` final) et 8 octets issus de la string `"titouan"` tendent comme les metadata vers une influencent nulle dans le total lorsque le vecteur devient grand devant le nombre de modalités.
 
-### Sous Arrow
+## Sous Arrow
 
 ```{r}
-library(arrow)
 donnees <- arrow_array(v)
 d <- donnees$data()
 raw_to_uint32 <- function(raw_vec) {
@@ -112,7 +296,7 @@ La taille observée pour ce vecteur au format `arrow` est de 46,625 octets. Il y
 * 5 huitième d'octets pour stocker l'emplacement des `NA` (un bit par valeur)
 * 5 * 4 octets pour les positions de début dé string (un uint32 correspond à 4 octets).
 
-### Conclusion
+## Conclusion
 
 Nous observons que le format de données arrow n'est pas magique et peut parfois être moins économe en mémoire : ici R est plus économe !!!!
 
@@ -124,90 +308,7 @@ De même, dans le cas de vecteurs caractères non répétitifs (comme un identif
 
 :::
 
-## Vecteur booléen
-
-### Sous R
-
-Un vecteur booléen dans R est, en interne, un vecteur d'entiers de taille 32 bits. Ce format n'est vraiment pas économe en taille. Nous gâchons `2^32 = 4 294 967 296` modalités possibles pour écrire des données qui n'utilisent que 3 modalités.
-
-```{r}
-v <- c(TRUE, TRUE, NA, FALSE, FALSE, NA, TRUE, TRUE, TRUE)
-
-code <- "
-SEXP res = PROTECT(NEW_RAW(4));
-uint32_t val = LOGICAL(x)[INTEGER(i)[0]];
-memcpy(RAW(res), &val, 4);
-UNPROTECT(1);
-return res;
-"
-get_value <- cfunction(signature(x = "character", i = "integer"), code, includes = "#include <stdint.h>")
-
-get_value(v, 0L)
-get_value(v, 1L)
-get_value(v, 2L)
-get_value(v, 3L)
-get_value(v, 4L)
-get_value(v, 5L)
-get_value(v, 6L)
-get_value(v, 7L)
-get_value(v, 8L)
-```
-
-Nous vérifions bien avec le code ci-dessus que les vecteurs booléens de R utilisent 4 octets :
-
-* Les valeurs `TRUE` sont représentées par `r get_value(v, 0L)`.
-* Les valeurs `FALSE` sont représentées par `r get_value(v, 3L)`.
-* Les valeurs `NA` sont représentées par `r get_value(v, 2L)`.
-
-Et il y a beaucoup de bits inutiles...
-
-```{r}
-object.size(rep(v, 10000L)) / 10000L # 9 * 4 bytes de uint32
-```
-
-La taille du vecteur v est de 36 octets, car il contient 9 booléens représentés sous formes d'entiers 32 bits (4 octets).
-
-### Sous Arrow
-
-Sous `arrow`, les vecteurs booléens sont représentés par deux buffers bit par bit.
-
-```{r}
-donnees <- arrow_array(v)
-d <- donnees$data()
-buff1 <- d$buffers[[1L]]$data()
-buff2 <- d$buffers[[2L]]$data()
-
-buff1
-# 1101 1011 0000 0001
-# 0000 0001 1101 1011 en inversant le little endian
-# Emplacement (en partant de la droite) des valeurs non nulles.
-buff2
-# 1100 0011 0000 0001
-# 0000 0001 1100 0011 en inversant le little endian
-# Emplacement des valeurs positives.
-```
-
-Nous pouvons observer le contenu des deux buffers :
-
-* `buff1` contient `r buff1`. Cela correspond à `1101 1011 0000 0001` en binaire, soit `0000 0001 1101 1011` en convention little-endian (inversion de l'ordre des octets). Nous pouvons retrouver, en partant de la droite, l'emplacement des valeurs non-nulles.
-* `buff2` contient `r buff2`. Cela correspond à `1100 0011 0000 0001` en binaire, soit `0000 0001 1100 0011` en convention little-endian. Nous pouvons retrouver, en partant de la droite, l'emplacement des valeurs positives.
-
-Il apparaît immédiatement que ce format de données est plus économe.
-
-```{r}
-arrow_array(rep(v, 10000L))$nbytes() / 10000L
-# 2,250 bytes
-# 9/8 de byte pour les NA
-# 9/8 de byte pour les TRUE/FALSE
-```
-
-Ici nous obtenons un vecteur de 2,250 octet. En effet. Il y a 9 valeurs représentées chacune par un bit (donc un huitième d'octet) de valeurs non-nulles et un bit de valeurs positives.
-
-### Conclusion
-
-Lorsque l'on s'attarde sur les vecteurs booléens, arrow est clairement meilleur que R avec son format bitwise !
-
-## Un tibble avec principalement des double et des entiers
+# Un tibble avec principalement des double et des entiers
 
 Pour synthèse, nous allons comparer un tibble avec principalement des double et des entiers, dans R et dans arrow. Nous utiliserons le tibble `flights` issue du package `nycflights13`.
 
@@ -258,13 +359,13 @@ En théorie, le standard arrow [permet](https://arrow.apache.org/docs/format/Col
 
 :::
 
-## Arbitrage reproductibilité / performance
+# Arbitrage reproductibilité / performance
 
-Le calcul dans arrow réordonne les calculs pour permettre le calcul parallèle, en supposant que les propriétés des lois arithmétiques (par exemple l'associativité et la commutativité de l'addition) sont vérifiées dans le monde des représentations informatique. Or, **les opérations sur les flottants ne vérifient pas les propriétés arithmétiques usuelles**.
+Le calcul dans arrow réordonne les opérations pour permettre le calcul parallèle, en supposant que les propriétés des lois arithmétiques (par exemple l'associativité et la commutativité de l'addition) sont vérifiées dans le monde des représentations informatique. Or, **les opérations sur les flottants ne vérifient pas les propriétés arithmétiques usuelles**.
 
 En particulier, l'addition au sens d'[IEEE 754](https://en.wikipedia.org/wiki/IEEE_754) n'est ni associative ni commutative.
 
-Historiquement, l'*implémentation FORTRAN* de BLAS/LAPACK, qui est le backend de nombreux outils matriciels tels que *R*, de *numpy*, de *MATLAB*... N'est plus depuis longtemps le moteur le plus performant. Il continue toutefois d'être utilisé pour sa profonde stabilité numérique et sa cohérence. Un exemple ci-dessous démontre l'emploi de la réassociation dans arrow.
+Historiquement, l'*implémentation FORTRAN* de BLAS/LAPACK, qui est le backend de nombreux outils matriciels tels que *R*, de *numpy*, de *MATLAB*... N'est plus depuis longtemps le moteur le plus performant. Il continue toutefois d'être utilisé pour sa profonde stabilité numérique et sa cohérence, y compris face à certaines de ses implémentations alternatives (OpenBLAS ou Intel MKL) qui ont l'avantage de la performance mais le désavantage d'une reproductibilité légèrement relâchée. Un exemple ci-dessous démontre l'emploi de la réassociation dans arrow.
 
 ```{r}
 v <- rep(c(1e20, -1e20, 1), 1L)
@@ -294,7 +395,7 @@ sum(v)
 Reduce(`+`, v)
 ```
 
-Ce n'est plus le cas pour le même vecteur répété 6 fois. Les calculs effectués par la librairie arrow ont une exigence moindre de reproductibilité et de conformité aux standards. Dans le cas des statistiques, toutefois, en genéral, l'extrême précision sous la virgule importe peu.
+Ce n'est plus le cas pour le même vecteur répété 6 fois. Les calculs effectués par la librairie arrow ont une exigence moindre de reproductibilité et de conformité aux standards. Dans le cas des statistiques, toutefois, en genéral, l'extrême précision sous la virgule importe peu. De même que la reproductibilité portable à 10^-n prêt, qui concerne essentiellement les tests unitaires.
 
 ```{r}
 code <- "double res = 0;
@@ -312,4 +413,4 @@ calc_c <- cfunction(signature(), code)
 calc_c()
 ```
 
-Comme on le voit ci-dessus, si on effectue le calcul dans C avec une simple boucle, on retrouve les résultats donnés par R. Mais la réassociation permet d'obtenir une efficience bien plus grande, en effectuant des calculs pyramidaux.
+Comme on le voit ci-dessus, si on effectue le calcul dans C avec une simple boucle, on retrouve les résultats donnés par R. Mais la réassociation utilisée par arrow permet d'obtenir une efficience bien plus grande, en effectuant des calculs pyramidaux parallèles ou des groupements soumis à des instructions SIMD.
