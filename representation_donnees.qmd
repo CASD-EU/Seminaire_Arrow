@@ -1,8 +1,10 @@
 ---
-title: "Le format de données arrow et le format de données R"
+title: "Représentations des données"
 ---
 
 Le format arrow a des [spécifications](https://arrow.apache.org/docs/format/Columnar.html) qui permettent aux différentes librairies de communiquer sans avoir à faire de conversion. Ce spécifications correspondent à des exigences de compatibilités et des propositions de fonctionnalités, mais nous allons vérifier ici quels formats de données sont utilisés par le package `arrow` et les comparer à ce qui est fait dans R.
+
+Pour ce faire, nous allons inspecter les représentations utilisées par R à l'aide de fonctions C.
 
 # Vecteur booléen
 

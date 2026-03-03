@@ -8,8 +8,10 @@ website:
     contents:
       - href: index.qmd
         text: Home
-      - href: format_r.qmd
-        text: Formats R vs arrow
+      - href: representation_donnees.qmd
+        text: Représentation des données
+      - href: immutabilite.qmd
+        text: Immutabilité dans R
     search: false
 
 format:

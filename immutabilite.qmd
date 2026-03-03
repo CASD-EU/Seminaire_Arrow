@@ -1,0 +1,92 @@
+---
+title: "Immutabilité dans R"
+---
+
+Dans ce court chapitre nous allons *brièvement* (le sujet du webinaire n'est pas R) aborder une des forces et des faiblesses de R. R est un langage vectoriel  inspiré de la programmation fonctionnelle. L'essentiel de ses objets sont immutables. C'est une force, car cela permet une clarté d'écriture importante. C'est aussi une faiblesse, car cela engendre de nombreuses copies.
+
+# Immutabilité dans R et gourmandise en mémoire
+
+Contrairement à beaucoup de langages de programmation (langages objet et langages impératifs), R utilise très peu de références.
+
+```{r}
+a <- 1L:10L
+b <- a
+b[1L] <- 3L
+a
+b
+```
+
+Dans beaucoup de langages de programmation, a et b référeraient au même objet et seraient tous deux modifiés. R étant un langage métier avant tout destiné à des usagers plus proches des mathématiques que de l'informatique, il n'est pas coutumier de ces références. Les objets R ne sont pas modifiables. Ils sont dit **immutables**.
+
+```{r}
+a <- 1:10
+tracemem(a)
+a[1L] <- 3L
+untracemem(a)
+```
+
+La fonction `tracemem()` permet de tracer quand un objet a été copié. Le choix d'immutabilité a une grande pertinence en terme de langage, mais une des conséquences est la présence de nombreuses copies dans R. **Lorsque l'on affecte une seule valeur d'un vecteur dans R, en réalité, tout le vecteur est copié**, pour éviter tout effet de bord.
+
+La présence de copies est un facteur majeur de consommation de ressources, tant du point de vue de la mémoire utilisée que du temps de calcul.
+
+::: {.callout-note}
+
+Si du point de vue de l'utilisateur, R fait une copie à chaque affectation, en réalité il n'est pas si stupide que cela non plus. R utilise une stratégie d'optimisation dite **copy-on-write** qui est également la stratégie utilisée par les `fork()` sous Linux et Unix.
+
+
+```{r}
+a <- 1:10
+tracemem(a)
+b <- a
+b[1L] <- 3L
+untracemem(a)
+```
+
+Dans l'exemple ci-dessus :
+
+* Des lors que l'on fait `b <- a` il y a une copie logique entre b et a, avec un *séparation logique* de mémoire.
+* R a attendu que b soit modifié avant de procéder, sous le capot, à une *séparation physique* des espaces mémoire.
+
+Cela permet de s'épargner une part des copies inutiles.
+
+:::
+
+# Allocation dynamique et garbage collector
+
+R étant un langage interprété, l'allocation de ses objets se fait toujours de manière dynamique. Dans les langages compilés de bas niveau, l'allocation dynamique requiert souvent une gestion consciente des allocations.
+
+```{c}
+#| eval: false
+#include <stdio.h>
+#include <stdlib.h>
+
+int main(int argc, char *argv[]) {
+    if (argc != 2) {
+        printf("Usage: %s <taille>\n", argv[0]);
+        return 1;
+    }
+
+    int n = atoi(argv[1]);
+    int *tableau = (int *)malloc(n * sizeof(int));
+
+    if (tableau == NULL) {
+        printf("Échec de l'allocation mémoire.\n");
+        return 1;
+    }
+
+    for (int i = 0; i < n; i++) {
+        tableau[i] = i;
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("tableau[%d] = %d\n", i, tableau[i]);
+    }
+
+    free(tableau);
+    return 0;
+}
+```
+
+Le programme C ci-dessus alloue un tableau d'entiers de taille m avec `malloc()` et il est impératif de libérer ces octets réservés au moment opportun avec `free()`.
+
+R ne souhaitant pas laisser à l'utilisateur la gestion de sa mémoire, il lui épargne heureusement l'usage de `free()`. En conséquence, cette étape est faite de manière automatique par R, via un *garbage collector* qui devine les objets qui n'ont plus aucune possibilité d'être utilisés. Cela est pratique (voire essentiel pour un langage de haut niveau), mais cela demande des ressources.
