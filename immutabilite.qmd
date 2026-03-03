@@ -230,30 +230,6 @@ library(bench)
 set.seed(1L)
 n <- 1e7
 v <- runif(n, min = 0, max = 100)
-ar <- Array$create(v)
-
-nombre_coeurs_disponibles <- parallel::detectCores()
-set_cpu_count(nombre_coeurs_disponibles)
-
-bench::mark(
-  sum_r = sum(v),
-  mean_r = mean(v),
-  sqrt_r = sqrt(v),
-  sum_arrow = sum(ar),
-  mean_arrow = mean(ar),
-  sqrt_arrow = sqrt(ar),
-  iterations  = 100,
-  check       = FALSE
-)
-```
-
-```{r}
-library(arrow)
-library(bench)
-
-set.seed(1L)
-n <- 1e7
-v <- runif(n, min = 0, max = 100)
 v_flt <- v > 50
 ar <- arrow_array(v)
 ar_flt <- arrow_array(v_flt)
