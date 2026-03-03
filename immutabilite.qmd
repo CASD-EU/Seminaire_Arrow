@@ -293,7 +293,8 @@ arrow_pipeline <- function() {
       count = n(),
       avg_dep_delay = mean(dep_delay),
       avg_arr_delay = mean(arr_delay),
-      avg_speed = mean(speed)
+      avg_speed = mean(speed),
+      .groups = "drop_last"
     ) %>%
     arrange(desc(avg_speed)) %>%
     collect()
@@ -308,7 +309,8 @@ dplyr_pipeline <- function() {
       count = n(),
       avg_dep_delay = mean(dep_delay),
       avg_arr_delay = mean(arr_delay),
-      avg_speed = mean(speed)
+      avg_speed = mean(speed),
+      .groups = "drop_last"
     ) %>%
     arrange(desc(avg_speed))
 }
