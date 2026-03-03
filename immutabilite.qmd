@@ -230,7 +230,7 @@ library(bench)
 set.seed(1L)
 n <- 1e7
 v <- runif(n, min = 0, max = 100)
-ar <- Array$create(vec)
+ar <- Array$create(v)
 
 nombre_coeurs_disponibles <- parallel::detectCores()
 set_cpu_count(nombre_coeurs_disponibles)
@@ -255,8 +255,8 @@ set.seed(1L)
 n <- 1e7
 v <- runif(n, min = 0, max = 100)
 v_flt <- v > 50
-ar <- arrow_array(vec)
-ar_flt <- arrow_array(flt)
+ar <- arrow_array(v)
+ar_flt <- arrow_array(v_flt)
 
 set_cpu_count(1L)
 
