@@ -2,10 +2,6 @@
 title: "Webinaire arrow"
 ---
 
-This is a Quarto website.
+Ce webinaire aborde le format de données Arrow et le compare aux formats usuels dans R.
+Pour en apprendre plus sur arrow, vous pouvez consulter le [site officiel](https://arrow.apache.org/).
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
-
-```{r}
-1 + 1
-```
