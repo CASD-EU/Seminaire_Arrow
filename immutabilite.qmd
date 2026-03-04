@@ -224,56 +224,98 @@ En réalité, comme on peut le voir dans son [code source](https://github.com/ap
 ## Sur les compute functions
 
 ```{r}
+#| cache: true
 library(arrow)
 library(bench)
 
 set.seed(1L)
 n <- 1e7
 v <- runif(n, min = 0, max = 100)
+v2 <- runif(n, min = 0, max = 100)
 v_flt <- v > 50
 ar <- arrow_array(v)
+ar2 <- arrow_array(v2)
 ar_flt <- arrow_array(v_flt)
-
-set_cpu_count(1L)
-
-bench::mark(
-  sum_r = sum(v),
-  mean_r = mean(v),
-  sqrt_r = sqrt(v),
-  filter_r = v[v_flt],
-  sum_arrow = call_function("sum", ar),
-  mean_arrow = call_function("mean", ar),
-  sqrt_arrow = call_function("sqrt", ar),
-  filter_arrow = call_function("filter", ar, ar_flt),
-  iterations  = 100,
-  check = FALSE,
-  memory = FALSE
-)
-
-nombre_coeurs_disponibles <- parallel::detectCores()
-set_cpu_count(nombre_coeurs_disponibles)
-
-bench::mark(
-  sum_r = sum(v),
-  mean_r = mean(v),
-  sqrt_r = sqrt(v),
-  filter_r = v[v_flt],
-  sum_arrow = call_function("sum", ar),
-  mean_arrow = call_function("mean", ar),
-  sqrt_arrow = call_function("sqrt", ar),
-  filter_arrow = call_function("filter", ar, ar_flt),
-  iterations  = 100,
-  check = FALSE,
-  memory = FALSE
-)
-
 ```
 
-Les temps de calcul sont du même ordre de grandeur sur les fonctions élémentaires.
+```{r}
+#| cache: true
+#| results: false
+bench_r <-
+  bench::mark(
+    sum = sum(v),
+    mean = mean(v),
+    sqrt = sqrt(v),
+    filter = v[v_flt],
+    add = v + v2,
+    mul = v * v2,
+    div = v / v2,
+    iterations  = 1000L,
+    check = FALSE,
+    memory = FALSE
+  ) %>%
+  select(expression, median) %>%
+  rename(r = median) %>%
+  mutate(expression = as.character(expression))
+```
+
+```{r}
+#| cache: true
+#| results: false
+set_cpu_count(1L)
+bench_arrow_single <-
+  bench::mark(
+    sum = call_function("sum", ar),
+    mean = call_function("mean", ar),
+    sqrt = call_function("sqrt", ar),
+    filter = call_function("filter", ar, ar_flt),
+    add = call_function("add_checked", ar, ar2),
+    mul = call_function("multiply_checked", ar, ar2),
+    div = call_function("divide_checked", ar, ar2),
+    iterations  = 1000L,
+    check = FALSE,
+    memory = FALSE,
+  ) %>%
+  select(expression, median) %>%
+  rename(arrow_single = median) %>%
+  mutate(expression = as.character(expression))
+```
+
+```{r}
+#| cache: true
+#| results: false
+nombre_coeurs_disponibles <- parallel::detectCores()
+set_cpu_count(nombre_coeurs_disponibles)
+bench_arrow_multi <-
+  bench::mark(
+    sum = call_function("sum", ar),
+    mean = call_function("mean", ar),
+    sqrt = call_function("sqrt", ar),
+    filter = call_function("filter", ar, ar_flt),
+    add = call_function("add_checked", ar, ar2),
+    mul = call_function("multiply_checked", ar, ar2),
+    div = call_function("divide_checked", ar, ar2),
+    iterations  = 1000L,
+    check = FALSE,
+    memory = FALSE,
+  ) %>%
+  select(expression, median) %>%
+  rename(arrow_multi = median) %>%
+  mutate(expression = as.character(expression))
+```
+
+```{r}
+bench_r %>%
+  left_join(bench_arrow_single, by = "expression") %>%
+  left_join(bench_arrow_multi, by = "expression")
+```
+
+Les temps de calcul sont également du même ordre de grandeur y compris lorsque l'on donne accès à `r nombre_coeurs_disponibles` coeurs à Arrow. 
 
 ## Sur Acero
 
 ```{r}
+#| cache: true
 library(dplyr)
 library(arrow)
 library(bench)
@@ -318,11 +360,14 @@ dplyr_pipeline <- function() {
 bench::mark(
   arrow = arrow_pipeline(),
   dplyr = dplyr_pipeline(),
-  iterations = 30,
+  iterations = 1000L,
   check = FALSE,
   memory = FALSE
-)
+) %>%
+  select(expression, median)
 ```
+
+Sur de petites données tabulaires... dplyr est plus rapide !
 
 # Conclusion
 
