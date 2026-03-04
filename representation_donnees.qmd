@@ -355,9 +355,3 @@ ar_opti$nbytes()
 
 Nous pouvons cependant réduire un peu la taille de la table arrow, en s'aidant de la disponibilité dans arrow des formats d'entiers et de flottants de taille inférieure à *int32* et *double*.
 
-::: {.callout-note}
-
-En théorie, le standard arrow [permet](https://arrow.apache.org/docs/format/Columnar.html#validity-bitmaps) l'économie de bits en épargnant l'utilisation d'un buffer de valeurs non-nulles lorsque nous utilisons des champs sans valeurs nulles (rajouter l'argument `nullable = FALSE` dans la fonction `field()`). En pratique, ce n'est pas ce qui est fait à ce jour dans l'implémentation `arrow` de R, et la représentation possède exactement la même taille lorsque nous utilisons cet argument.
-
-:::
-
