@@ -250,9 +250,11 @@ bench_r <-
     add = v + v2,
     mul = v * v2,
     div = v / v2,
-    iterations  = 1000L,
+    iterations  = 100L,
     check = FALSE,
-    memory = FALSE
+    memory = FALSE,
+    filter_gc = FALSE,
+    time_unit = "ms"
   ) %>%
   select(expression, median) %>%
   rename(r = median) %>%
@@ -272,9 +274,11 @@ bench_arrow_single <-
     add = call_function("add_checked", ar, ar2),
     mul = call_function("multiply_checked", ar, ar2),
     div = call_function("divide_checked", ar, ar2),
-    iterations  = 1000L,
+    iterations  = 100L,
     check = FALSE,
     memory = FALSE,
+    filter_gc = FALSE,
+    time_unit = "ms"
   ) %>%
   select(expression, median) %>%
   rename(arrow_single = median) %>%
@@ -295,9 +299,11 @@ bench_arrow_multi <-
     add = call_function("add_checked", ar, ar2),
     mul = call_function("multiply_checked", ar, ar2),
     div = call_function("divide_checked", ar, ar2),
-    iterations  = 1000L,
+    iterations  = 100L,
     check = FALSE,
     memory = FALSE,
+    filter_gc = FALSE,
+    time_unit = "ms"
   ) %>%
   select(expression, median) %>%
   rename(arrow_multi = median) %>%
@@ -316,55 +322,81 @@ Les temps de calcul sont également du même ordre de grandeur y compris lorsque
 
 ```{r}
 #| cache: true
+#| results: false
 library(dplyr)
 library(arrow)
 library(bench)
 library(nycflights13)
 
-flights_tbl <- flights %>%
-  select(year, month, day, carrier, origin, dest, dep_delay, arr_delay, air_time, distance)
+bench_nrow <-
+  bench::press(
+    rep_tbl = seq(2L,21L, 2L), {
+      flights_tbl <- bind_rows(replicate(rep_tbl, flights, simplify = FALSE)) %>%
+        select(year, month, day, carrier, origin, dest, dep_delay, arr_delay, air_time, distance)
+      
+      ar_flights <- flights_tbl %>% arrow_table()
+      
+      arrow_pipeline <- function() {
+        ar_flights %>%
+          filter(!is.na(dep_delay) & !is.na(arr_delay) & !is.na(distance)) %>%
+          mutate(speed = distance / (air_time / 60)) %>% # vitesse moyenne en miles/heure
+          group_by(origin, dest) %>%
+          summarise(
+            count = n(),
+            avg_dep_delay = mean(dep_delay),
+            avg_arr_delay = mean(arr_delay),
+            avg_speed = mean(speed),
+            .groups = "drop_last"
+          ) %>%
+          arrange(desc(avg_speed)) %>%
+          collect()
+      }
+      
+      dplyr_pipeline <- function() {
+        flights_tbl %>%
+          filter(!is.na(dep_delay) & !is.na(arr_delay) & !is.na(distance)) %>%
+          mutate(speed = distance / (air_time / 60)) %>%
+          group_by(origin, dest) %>%
+          summarise(
+            count = n(),
+            avg_dep_delay = mean(dep_delay),
+            avg_arr_delay = mean(arr_delay),
+            avg_speed = mean(speed),
+            .groups = "drop_last"
+          ) %>%
+          arrange(desc(avg_speed))
+      }
+      bench::mark(
+        arrow = arrow_pipeline(),
+        dplyr = dplyr_pipeline(),
+        iterations = 20L,
+        check = FALSE,
+        memory = FALSE,
+        filter_gc = FALSE,
+        time_unit = "ms"
+      )
+    }
+  ) %>%
+  mutate(n_rows = nrow(flights) * rep_tbl, expression = as.character(expression)) %>%
+  select(expression, n_rows, median) %>%
+  rename(time = median)
+```
 
-ar_flights <- flights_tbl %>% arrow_table()
+```{r}
+library(dplyr)
+library(ggplot2)
+library(tidyr)
 
-arrow_pipeline <- function() {
-  ar_flights %>%
-    filter(!is.na(dep_delay) & !is.na(arr_delay) & !is.na(distance)) %>%
-    mutate(speed = distance / (air_time / 60)) %>% # vitesse moyenne en miles/heure
-    group_by(origin, dest) %>%
-    summarise(
-      count = n(),
-      avg_dep_delay = mean(dep_delay),
-      avg_arr_delay = mean(arr_delay),
-      avg_speed = mean(speed),
-      .groups = "drop_last"
-    ) %>%
-    arrange(desc(avg_speed)) %>%
-    collect()
-}
-
-dplyr_pipeline <- function() {
-  flights_tbl %>%
-    filter(!is.na(dep_delay) & !is.na(arr_delay) & !is.na(distance)) %>%
-    mutate(speed = distance / (air_time / 60)) %>%
-    group_by(origin, dest) %>%
-    summarise(
-      count = n(),
-      avg_dep_delay = mean(dep_delay),
-      avg_arr_delay = mean(arr_delay),
-      avg_speed = mean(speed),
-      .groups = "drop_last"
-    ) %>%
-    arrange(desc(avg_speed))
-}
-
-bench::mark(
-  arrow = arrow_pipeline(),
-  dplyr = dplyr_pipeline(),
-  iterations = 1000L,
-  check = FALSE,
-  memory = FALSE
-) %>%
-  select(expression, median)
+ggplot(bench_nrow, aes(x = n_rows, y = time, color = expression)) +
+  geom_line() +
+  scale_x_continuous() +
+  labs(
+    title = "Comparaison des performances : Arrow vs dplyr",
+    subtitle = "Temps médian d'exécution en fonction du nombre de lignes",
+    x = "Nombre de lignes",
+    y = "Temps d'exécution",
+    color = "Pipeline"
+  )
 ```
 
 Sur de petites données tabulaires... dplyr est plus rapide !

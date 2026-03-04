@@ -228,11 +228,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "&lt;000001AD84F9B6F0&gt;"</code></pre>
+<pre><code>[1] "&lt;0000014FBBD7D9C0&gt;"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>L] <span class="ot">&lt;-</span> <span class="dv">3</span>L</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tracemem[0x000001ad84f9b6f0 -&gt; 0x000001ad84f92648]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers with_options &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
+<pre><code>tracemem[0x0000014fbbd7d9c0 -&gt; 0x0000014fbbd78708]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers with_options &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">untracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -246,12 +246,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "&lt;000001AD85A6D128&gt;"</code></pre>
+<pre><code>[1] "&lt;0000014FC0FA20E0&gt;"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>b[<span class="dv">1</span>L] <span class="ot">&lt;-</span> <span class="dv">3</span>L</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tracemem[0x000001ad85a6d128 -&gt; 0x000001ad83255b38]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers with_options &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
+<pre><code>tracemem[0x0000014fc0fa20e0 -&gt; 0x0000014fc18d8b68]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers with_options &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">untracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -333,55 +333,55 @@ Attachement du package : 'lobstr'</code></pre>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad84841a98] &lt;tibble[,4]&gt; 
-+-name = [2:0x1adff2de6c0] &lt;chr&gt; 
-+-height = [3:0x1ad80f57f10] &lt;int&gt; 
-+-mass = [4:0x1adff2de9b0] &lt;dbl&gt; 
-\-homeworld = [5:0x1adff2db1e0] &lt;chr&gt; </code></pre>
+<pre><code>o [1:0x14fbb597e18] &lt;tibble[,4]&gt; 
++-name = [2:0x14fbea062d0] &lt;chr&gt; 
++-height = [3:0x14fbde6e280] &lt;int&gt; 
++-mass = [4:0x14fbea05420] &lt;dbl&gt; 
+\-homeworld = [5:0x14fbea04280] &lt;chr&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad86686de8] &lt;tibble[,4]&gt; 
-+-name = [2:0x1adff23a0a0] &lt;chr&gt; 
-+-height = [3:0x1ad864f0f60] &lt;int&gt; 
-+-mass = [4:0x1adff23a2b0] &lt;dbl&gt; 
-\-homeworld = [5:0x1adff2387e0] &lt;chr&gt; </code></pre>
+<pre><code>o [1:0x14fc1946658] &lt;tibble[,4]&gt; 
++-name = [2:0x14fbd15c8a0] &lt;chr&gt; 
++-height = [3:0x14fbd02e2c0] &lt;int&gt; 
++-mass = [4:0x14fbd15c690] &lt;dbl&gt; 
+\-homeworld = [5:0x14fbd15dd40] &lt;chr&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad866864b8] &lt;tibble[,5]&gt; 
-+-name = [2:0x1adff23a0a0] &lt;chr&gt; 
-+-height = [3:0x1ad864f0f60] &lt;int&gt; 
-+-mass = [4:0x1adff23a2b0] &lt;dbl&gt; 
-+-homeworld = [5:0x1adff2387e0] &lt;chr&gt; 
-\-bmi = [6:0x1adff239230] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x14fbbc110a8] &lt;tibble[,5]&gt; 
++-name = [2:0x14fbd15c8a0] &lt;chr&gt; 
++-height = [3:0x14fbd02e2c0] &lt;int&gt; 
++-mass = [4:0x14fbd15c690] &lt;dbl&gt; 
++-homeworld = [5:0x14fbd15dd40] &lt;chr&gt; 
+\-bmi = [6:0x14fbd15e9a0] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad834e2058] &lt;gropd_df[,5]&gt; 
-+-name = [2:0x1adff23a0a0] &lt;chr&gt; 
-+-height = [3:0x1ad864f0f60] &lt;int&gt; 
-+-mass = [4:0x1adff23a2b0] &lt;dbl&gt; 
-+-homeworld = [5:0x1adff2387e0] &lt;chr&gt; 
-\-bmi = [6:0x1adff239230] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x14fbc806908] &lt;gropd_df[,5]&gt; 
++-name = [2:0x14fbd15c8a0] &lt;chr&gt; 
++-height = [3:0x14fbd02e2c0] &lt;int&gt; 
++-mass = [4:0x14fbd15c690] &lt;dbl&gt; 
++-homeworld = [5:0x14fbd15dd40] &lt;chr&gt; 
+\-bmi = [6:0x14fbd15e9a0] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad833bcdb8] &lt;tibble[,5]&gt; 
-+-homeworld = [2:0x1ad861511e0] &lt;chr&gt; 
-+-count = [3:0x1ad8662e870] &lt;int&gt; 
-+-avg_height = [4:0x1ad86151060] &lt;dbl&gt; 
-+-avg_mass = [5:0x1ad86152ce0] &lt;dbl&gt; 
-\-avg_bmi = [6:0x1ad861550e0] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x14fbc8299f8] &lt;tibble[,5]&gt; 
++-homeworld = [2:0x14fbcc237f0] &lt;chr&gt; 
++-count = [3:0x14fbd101e90] &lt;int&gt; 
++-avg_height = [4:0x14fbcc25bf0] &lt;dbl&gt; 
++-avg_mass = [5:0x14fbcc23670] &lt;dbl&gt; 
+\-avg_bmi = [6:0x14fbcc24570] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x1ad83284168] &lt;tibble[,5]&gt; 
-+-homeworld = [2:0x1ad86153d60] &lt;chr&gt; 
-+-count = [3:0x1ad8662f750] &lt;int&gt; 
-+-avg_height = [4:0x1ad86150460] &lt;dbl&gt; 
-+-avg_mass = [5:0x1ad86155560] &lt;dbl&gt; 
-\-avg_bmi = [6:0x1ad86155260] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x14fbc82fbe8] &lt;tibble[,5]&gt; 
++-homeworld = [2:0x14fbcc25ef0] &lt;chr&gt; 
++-count = [3:0x14fbd0fea10] &lt;int&gt; 
++-avg_height = [4:0x14fbcc252f0] &lt;dbl&gt; 
++-avg_mass = [5:0x14fbcc216f0] &lt;dbl&gt; 
+\-avg_bmi = [6:0x14fbcc21870] &lt;dbl&gt; </code></pre>
 </div>
 </div>
 <p>On peut ainsi observer :</p>
@@ -430,15 +430,15 @@ Attachement du package : 'arrow'</code></pre>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>ar<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x000001ad86591340&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000014fbe1d4440&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ar_1<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x000001ad86591380&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000014fbe1d4380&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>ar_2<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x000001ad86591620&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000014fbe1d41a0&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -631,13 +631,15 @@ See $.data for the source Arrow object</code></pre>
 <span id="cb62-7"><a href="#cb62-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> v <span class="sc">+</span> v2,</span>
 <span id="cb62-8"><a href="#cb62-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">mul =</span> v <span class="sc">*</span> v2,</span>
 <span id="cb62-9"><a href="#cb62-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">div =</span> v <span class="sc">/</span> v2,</span>
-<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">1000</span>L,</span>
+<span id="cb62-10"><a href="#cb62-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">100</span>L,</span>
 <span id="cb62-11"><a href="#cb62-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">memory =</span> <span class="cn">FALSE</span></span>
-<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
-<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">r =</span> median) <span class="sc">%&gt;%</span></span>
-<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb62-12"><a href="#cb62-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb62-13"><a href="#cb62-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb62-14"><a href="#cb62-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb62-15"><a href="#cb62-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb62-16"><a href="#cb62-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
+<span id="cb62-17"><a href="#cb62-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">r =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb62-18"><a href="#cb62-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set_cpu_count</span>(<span class="dv">1</span>L)</span>
@@ -650,13 +652,15 @@ See $.data for the source Arrow object</code></pre>
 <span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="fu">call_function</span>(<span class="st">"add_checked"</span>, ar, ar2),</span>
 <span id="cb63-9"><a href="#cb63-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">mul =</span> <span class="fu">call_function</span>(<span class="st">"multiply_checked"</span>, ar, ar2),</span>
 <span id="cb63-10"><a href="#cb63-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">div =</span> <span class="fu">call_function</span>(<span class="st">"divide_checked"</span>, ar, ar2),</span>
-<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">1000</span>L,</span>
+<span id="cb63-11"><a href="#cb63-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">100</span>L,</span>
 <span id="cb63-12"><a href="#cb63-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb63-13"><a href="#cb63-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
-<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">arrow_single =</span> median) <span class="sc">%&gt;%</span></span>
-<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb63-14"><a href="#cb63-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb63-15"><a href="#cb63-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb63-16"><a href="#cb63-16" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb63-17"><a href="#cb63-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
+<span id="cb63-18"><a href="#cb63-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">arrow_single =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb63-19"><a href="#cb63-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a>nombre_coeurs_disponibles <span class="ot">&lt;-</span> parallel<span class="sc">::</span><span class="fu">detectCores</span>()</span>
@@ -670,13 +674,15 @@ See $.data for the source Arrow object</code></pre>
 <span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">add =</span> <span class="fu">call_function</span>(<span class="st">"add_checked"</span>, ar, ar2),</span>
 <span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">mul =</span> <span class="fu">call_function</span>(<span class="st">"multiply_checked"</span>, ar, ar2),</span>
 <span id="cb64-11"><a href="#cb64-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">div =</span> <span class="fu">call_function</span>(<span class="st">"divide_checked"</span>, ar, ar2),</span>
-<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">1000</span>L,</span>
+<span id="cb64-12"><a href="#cb64-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">iterations  =</span> <span class="dv">100</span>L,</span>
 <span id="cb64-13"><a href="#cb64-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
 <span id="cb64-14"><a href="#cb64-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
-<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">arrow_multi =</span> median) <span class="sc">%&gt;%</span></span>
-<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb64-15"><a href="#cb64-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb64-16"><a href="#cb64-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb64-17"><a href="#cb64-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb64-18"><a href="#cb64-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
+<span id="cb64-19"><a href="#cb64-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">arrow_multi =</span> median) <span class="sc">%&gt;%</span></span>
+<span id="cb64-20"><a href="#cb64-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>bench_r <span class="sc">%&gt;%</span></span>
@@ -684,15 +690,15 @@ See $.data for the source Arrow object</code></pre>
 <span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(bench_arrow_multi, <span class="at">by =</span> <span class="st">"expression"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 7 x 4
-  expression r          arrow_single arrow_multi
-  &lt;chr&gt;      &lt;bench_tm&gt; &lt;bench_tm&gt;   &lt;bench_tm&gt; 
-1 sum        0.00738180 0.0060003    0.00636850 
-2 mean       0.01530530 0.0059822    0.00600850 
-3 sqrt       0.04607540 0.0284665    0.02538085 
-4 filter     0.06021615 0.0310882    0.03106380 
-5 add        0.02560970 0.0298712    0.02976640 
-6 mul        0.02559835 0.0321450    0.02946330 
-7 div        0.02564325 0.0337343    0.03587520 </code></pre>
+  expression     r arrow_single arrow_multi
+  &lt;chr&gt;      &lt;dbl&gt;        &lt;dbl&gt;       &lt;dbl&gt;
+1 sum         7.64         6.11        8.60
+2 mean       15.3          6.12        7.03
+3 sqrt       47.6         20.8        23.0 
+4 filter     61.1         31.5        30.9 
+5 add        25.8         38.4        27.1 
+6 mul        25.8         25.1        23.2 
+7 div        25.9         55.1        36.0 </code></pre>
 </div>
 </div>
 <p>Les temps de calcul sont également du même ordre de grandeur y compris lorsque l’on donne accès à 8 coeurs à Arrow.</p>
@@ -705,56 +711,114 @@ See $.data for the source Arrow object</code></pre>
 <span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bench)</span>
 <span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
 <span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>flights_tbl <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span></span>
-<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(year, month, day, carrier, origin, dest, dep_delay, arr_delay, air_time, distance)</span>
-<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>ar_flights <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span> <span class="fu">arrow_table</span>()</span>
-<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>arrow_pipeline <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>  ar_flights <span class="sc">%&gt;%</span></span>
-<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(arr_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
-<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">speed =</span> distance <span class="sc">/</span> (air_time <span class="sc">/</span> <span class="dv">60</span>)) <span class="sc">%&gt;%</span> <span class="co"># vitesse moyenne en miles/heure</span></span>
-<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(origin, dest) <span class="sc">%&gt;%</span></span>
-<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay),</span>
-<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_arr_delay =</span> <span class="fu">mean</span>(arr_delay),</span>
-<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_speed =</span> <span class="fu">mean</span>(speed),</span>
-<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop_last"</span></span>
-<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_speed)) <span class="sc">%&gt;%</span></span>
-<span id="cb67-24"><a href="#cb67-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>()</span>
-<span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-27"><a href="#cb67-27" aria-hidden="true" tabindex="-1"></a>dplyr_pipeline <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
-<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a>  flights_tbl <span class="sc">%&gt;%</span></span>
-<span id="cb67-29"><a href="#cb67-29" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(arr_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
-<span id="cb67-30"><a href="#cb67-30" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">speed =</span> distance <span class="sc">/</span> (air_time <span class="sc">/</span> <span class="dv">60</span>)) <span class="sc">%&gt;%</span></span>
-<span id="cb67-31"><a href="#cb67-31" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(origin, dest) <span class="sc">%&gt;%</span></span>
-<span id="cb67-32"><a href="#cb67-32" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(</span>
-<span id="cb67-33"><a href="#cb67-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb67-34"><a href="#cb67-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay),</span>
-<span id="cb67-35"><a href="#cb67-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_arr_delay =</span> <span class="fu">mean</span>(arr_delay),</span>
-<span id="cb67-36"><a href="#cb67-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">avg_speed =</span> <span class="fu">mean</span>(speed),</span>
-<span id="cb67-37"><a href="#cb67-37" aria-hidden="true" tabindex="-1"></a>      <span class="at">.groups =</span> <span class="st">"drop_last"</span></span>
-<span id="cb67-38"><a href="#cb67-38" aria-hidden="true" tabindex="-1"></a>    ) <span class="sc">%&gt;%</span></span>
-<span id="cb67-39"><a href="#cb67-39" aria-hidden="true" tabindex="-1"></a>    <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_speed))</span>
-<span id="cb67-40"><a href="#cb67-40" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb67-41"><a href="#cb67-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb67-42"><a href="#cb67-42" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb67-43"><a href="#cb67-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">arrow =</span> <span class="fu">arrow_pipeline</span>(),</span>
-<span id="cb67-44"><a href="#cb67-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">dplyr =</span> <span class="fu">dplyr_pipeline</span>(),</span>
-<span id="cb67-45"><a href="#cb67-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">iterations =</span> <span class="dv">1000</span>L,</span>
-<span id="cb67-46"><a href="#cb67-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb67-47"><a href="#cb67-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">memory =</span> <span class="cn">FALSE</span></span>
-<span id="cb67-48"><a href="#cb67-48" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span></span>
-<span id="cb67-49"><a href="#cb67-49" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, median)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 x 2
-  expression   median
-  &lt;bch:expr&gt; &lt;bch:tm&gt;
-1 arrow       103.4ms
-2 dplyr        44.3ms</code></pre>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a>bench_nrow <span class="ot">&lt;-</span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a>  bench<span class="sc">::</span><span class="fu">press</span>(</span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">rep_tbl =</span> <span class="fu">seq</span>(<span class="dv">2</span>L,<span class="dv">21</span>L, <span class="dv">2</span>L), {</span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a>      flights_tbl <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(<span class="fu">replicate</span>(rep_tbl, flights, <span class="at">simplify =</span> <span class="cn">FALSE</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">select</span>(year, month, day, carrier, origin, dest, dep_delay, arr_delay, air_time, distance)</span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a>      ar_flights <span class="ot">&lt;-</span> flights_tbl <span class="sc">%&gt;%</span> <span class="fu">arrow_table</span>()</span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb67-14"><a href="#cb67-14" aria-hidden="true" tabindex="-1"></a>      arrow_pipeline <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb67-15"><a href="#cb67-15" aria-hidden="true" tabindex="-1"></a>        ar_flights <span class="sc">%&gt;%</span></span>
+<span id="cb67-16"><a href="#cb67-16" aria-hidden="true" tabindex="-1"></a>          <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(arr_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-17"><a href="#cb67-17" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">speed =</span> distance <span class="sc">/</span> (air_time <span class="sc">/</span> <span class="dv">60</span>)) <span class="sc">%&gt;%</span> <span class="co"># vitesse moyenne en miles/heure</span></span>
+<span id="cb67-18"><a href="#cb67-18" aria-hidden="true" tabindex="-1"></a>          <span class="fu">group_by</span>(origin, dest) <span class="sc">%&gt;%</span></span>
+<span id="cb67-19"><a href="#cb67-19" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarise</span>(</span>
+<span id="cb67-20"><a href="#cb67-20" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb67-21"><a href="#cb67-21" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay),</span>
+<span id="cb67-22"><a href="#cb67-22" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_arr_delay =</span> <span class="fu">mean</span>(arr_delay),</span>
+<span id="cb67-23"><a href="#cb67-23" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_speed =</span> <span class="fu">mean</span>(speed),</span>
+<span id="cb67-24"><a href="#cb67-24" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop_last"</span></span>
+<span id="cb67-25"><a href="#cb67-25" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">%&gt;%</span></span>
+<span id="cb67-26"><a href="#cb67-26" aria-hidden="true" tabindex="-1"></a>          <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_speed)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-27"><a href="#cb67-27" aria-hidden="true" tabindex="-1"></a>          <span class="fu">collect</span>()</span>
+<span id="cb67-28"><a href="#cb67-28" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb67-29"><a href="#cb67-29" aria-hidden="true" tabindex="-1"></a>      </span>
+<span id="cb67-30"><a href="#cb67-30" aria-hidden="true" tabindex="-1"></a>      dplyr_pipeline <span class="ot">&lt;-</span> <span class="cf">function</span>() {</span>
+<span id="cb67-31"><a href="#cb67-31" aria-hidden="true" tabindex="-1"></a>        flights_tbl <span class="sc">%&gt;%</span></span>
+<span id="cb67-32"><a href="#cb67-32" aria-hidden="true" tabindex="-1"></a>          <span class="fu">filter</span>(<span class="sc">!</span><span class="fu">is.na</span>(dep_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(arr_delay) <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(distance)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-33"><a href="#cb67-33" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">speed =</span> distance <span class="sc">/</span> (air_time <span class="sc">/</span> <span class="dv">60</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-34"><a href="#cb67-34" aria-hidden="true" tabindex="-1"></a>          <span class="fu">group_by</span>(origin, dest) <span class="sc">%&gt;%</span></span>
+<span id="cb67-35"><a href="#cb67-35" aria-hidden="true" tabindex="-1"></a>          <span class="fu">summarise</span>(</span>
+<span id="cb67-36"><a href="#cb67-36" aria-hidden="true" tabindex="-1"></a>            <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb67-37"><a href="#cb67-37" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay),</span>
+<span id="cb67-38"><a href="#cb67-38" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_arr_delay =</span> <span class="fu">mean</span>(arr_delay),</span>
+<span id="cb67-39"><a href="#cb67-39" aria-hidden="true" tabindex="-1"></a>            <span class="at">avg_speed =</span> <span class="fu">mean</span>(speed),</span>
+<span id="cb67-40"><a href="#cb67-40" aria-hidden="true" tabindex="-1"></a>            <span class="at">.groups =</span> <span class="st">"drop_last"</span></span>
+<span id="cb67-41"><a href="#cb67-41" aria-hidden="true" tabindex="-1"></a>          ) <span class="sc">%&gt;%</span></span>
+<span id="cb67-42"><a href="#cb67-42" aria-hidden="true" tabindex="-1"></a>          <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_speed))</span>
+<span id="cb67-43"><a href="#cb67-43" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb67-44"><a href="#cb67-44" aria-hidden="true" tabindex="-1"></a>      bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb67-45"><a href="#cb67-45" aria-hidden="true" tabindex="-1"></a>        <span class="at">arrow =</span> <span class="fu">arrow_pipeline</span>(),</span>
+<span id="cb67-46"><a href="#cb67-46" aria-hidden="true" tabindex="-1"></a>        <span class="at">dplyr =</span> <span class="fu">dplyr_pipeline</span>(),</span>
+<span id="cb67-47"><a href="#cb67-47" aria-hidden="true" tabindex="-1"></a>        <span class="at">iterations =</span> <span class="dv">20</span>L,</span>
+<span id="cb67-48"><a href="#cb67-48" aria-hidden="true" tabindex="-1"></a>        <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb67-49"><a href="#cb67-49" aria-hidden="true" tabindex="-1"></a>        <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb67-50"><a href="#cb67-50" aria-hidden="true" tabindex="-1"></a>        <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb67-51"><a href="#cb67-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb67-52"><a href="#cb67-52" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb67-53"><a href="#cb67-53" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb67-54"><a href="#cb67-54" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb67-55"><a href="#cb67-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">n_rows =</span> <span class="fu">nrow</span>(flights) <span class="sc">*</span> rep_tbl, <span class="at">expression =</span> <span class="fu">as.character</span>(expression)) <span class="sc">%&gt;%</span></span>
+<span id="cb67-56"><a href="#cb67-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(expression, n_rows, median) <span class="sc">%&gt;%</span></span>
+<span id="cb67-57"><a href="#cb67-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">rename</span>(<span class="at">time =</span> median)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Running with:
+   rep_tbl</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 1       2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 2       4</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 3       6</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 4       8</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 5      10</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 6      12</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 7      14</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 8      16</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code> 9      18</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>10      20</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(bench_nrow, <span class="fu">aes</span>(<span class="at">x =</span> n_rows, <span class="at">y =</span> time, <span class="at">color =</span> expression)) <span class="sc">+</span></span>
+<span id="cb79-6"><a href="#cb79-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span></span>
+<span id="cb79-7"><a href="#cb79-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_x_continuous</span>() <span class="sc">+</span></span>
+<span id="cb79-8"><a href="#cb79-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb79-9"><a href="#cb79-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Comparaison des performances : Arrow vs dplyr"</span>,</span>
+<span id="cb79-10"><a href="#cb79-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"Temps médian d'exécution en fonction du nombre de lignes"</span>,</span>
+<span id="cb79-11"><a href="#cb79-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"Nombre de lignes"</span>,</span>
+<span id="cb79-12"><a href="#cb79-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"Temps d'exécution"</span>,</span>
+<span id="cb79-13"><a href="#cb79-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">color =</span> <span class="st">"Pipeline"</span></span>
+<span id="cb79-14"><a href="#cb79-14" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="immutabilite_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>Sur de petites données tabulaires… dplyr est plus rapide !</p>
