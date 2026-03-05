@@ -234,11 +234,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "&lt;00000274E41C3DA0&gt;"</code></pre>
+<pre><code>[1] "&lt;000001F66E099F40&gt;"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>a[<span class="dv">1</span>L] <span class="ot">&lt;-</span> <span class="dv">3</span>L</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tracemem[0x00000274e41c3da0 -&gt; 0x00000274e41ef1a8]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
+<pre><code>tracemem[0x000001f66e099f40 -&gt; 0x000001f66e0b70d8]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">untracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -252,12 +252,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] "&lt;00000274E4C25D78&gt;"</code></pre>
+<pre><code>[1] "&lt;000001F66EAF9D18&gt;"</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> a</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>b[<span class="dv">1</span>L] <span class="ot">&lt;-</span> <span class="dv">3</span>L</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>tracemem[0x00000274e4c25d78 -&gt; 0x00000274e4c6cc78]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
+<pre><code>tracemem[0x000001f66eaf9d18 -&gt; 0x000001f66eb36bf8]: eval eval withVisible withCallingHandlers eval eval with_handlers doWithOneRestart withOneRestart withRestartList doWithOneRestart withOneRestart withRestartList withRestarts &lt;Anonymous&gt; evaluate in_dir in_input_dir eng_r block_exec call_block process_group withCallingHandlers &lt;Anonymous&gt; process_file &lt;Anonymous&gt; &lt;Anonymous&gt; execute .main </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">untracemem</span>(a)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
@@ -339,55 +339,55 @@ Attachement du package : 'lobstr'</code></pre>
 <span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_1)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e37df558] &lt;tibble[,4]&gt; 
-+-name = [2:0x274ded573c0] &lt;chr&gt; 
-+-height = [3:0x274e18946e0] &lt;int&gt; 
-+-mass = [4:0x274ded55c40] &lt;dbl&gt; 
-\-homeworld = [5:0x274ded570d0] &lt;chr&gt; </code></pre>
+<pre><code>o [1:0x1f66d6c5588] &lt;tibble[,4]&gt; 
++-name = [2:0x1f66891bce0] &lt;chr&gt; 
++-height = [3:0x1f66a936bd0] &lt;int&gt; 
++-mass = [4:0x1f66891c8a0] &lt;dbl&gt; 
+\-homeworld = [5:0x1f66b9fbf60] &lt;chr&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e58613e8] &lt;tibble[,4]&gt; 
-+-name = [2:0x274e261cc00] &lt;chr&gt; 
-+-height = [3:0x274e54f0b70] &lt;int&gt; 
-+-mass = [4:0x274e261b970] &lt;dbl&gt; 
-\-homeworld = [5:0x274e261a8f0] &lt;chr&gt; </code></pre>
+<pre><code>o [1:0x1f66f723df8] &lt;tibble[,4]&gt; 
++-name = [2:0x1f66b9fe8a0] &lt;chr&gt; 
++-height = [3:0x1f66f3cd350] &lt;int&gt; 
++-mass = [4:0x1f66b9feed0] &lt;dbl&gt; 
+\-homeworld = [5:0x1f66f80c9f0] &lt;chr&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_3)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e5876a98] &lt;tibble[,5]&gt; 
-+-name = [2:0x274e261cc00] &lt;chr&gt; 
-+-height = [3:0x274e54f0b70] &lt;int&gt; 
-+-mass = [4:0x274e261b970] &lt;dbl&gt; 
-+-homeworld = [5:0x274e261a8f0] &lt;chr&gt; 
-\-bmi = [6:0x274e261c7e0] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x1f66f725408] &lt;tibble[,5]&gt; 
++-name = [2:0x1f66b9fe8a0] &lt;chr&gt; 
++-height = [3:0x1f66f3cd350] &lt;int&gt; 
++-mass = [4:0x1f66b9feed0] &lt;dbl&gt; 
++-homeworld = [5:0x1f66f80c9f0] &lt;chr&gt; 
+\-bmi = [6:0x1f66f80b760] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_4)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e587a508] &lt;gropd_df[,5]&gt; 
-+-name = [2:0x274e261cc00] &lt;chr&gt; 
-+-height = [3:0x274e54f0b70] &lt;int&gt; 
-+-mass = [4:0x274e261b970] &lt;dbl&gt; 
-+-homeworld = [5:0x274e261a8f0] &lt;chr&gt; 
-\-bmi = [6:0x274e261c7e0] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x1f66f732ec8] &lt;gropd_df[,5]&gt; 
++-name = [2:0x1f66b9fe8a0] &lt;chr&gt; 
++-height = [3:0x1f66f3cd350] &lt;int&gt; 
++-mass = [4:0x1f66b9feed0] &lt;dbl&gt; 
++-homeworld = [5:0x1f66f80c9f0] &lt;chr&gt; 
+\-bmi = [6:0x1f66f80b760] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_5)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e587e368] &lt;tibble[,5]&gt; 
-+-homeworld = [2:0x274e52c36b0] &lt;chr&gt; 
-+-count = [3:0x274e54e6a50] &lt;int&gt; 
-+-avg_height = [4:0x274e52c6fb0] &lt;dbl&gt; 
-+-avg_mass = [5:0x274e5908160] &lt;dbl&gt; 
-\-avg_bmi = [6:0x274e59082e0] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x1f66f734d18] &lt;tibble[,5]&gt; 
++-homeworld = [2:0x1f66f1a42e0] &lt;chr&gt; 
++-count = [3:0x1f66f3c4680] &lt;int&gt; 
++-avg_height = [4:0x1f66f1ab4e0] &lt;dbl&gt; 
++-avg_mass = [5:0x1f66f87c700] &lt;dbl&gt; 
+\-avg_bmi = [6:0x1f66f880180] &lt;dbl&gt; </code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ref</span>(etape_6)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>o [1:0x274e2503c68] &lt;tibble[,5]&gt; 
-+-homeworld = [2:0x274e5908460] &lt;chr&gt; 
-+-count = [3:0x274e54e7af0] &lt;int&gt; 
-+-avg_height = [4:0x274e5907560] &lt;dbl&gt; 
-+-avg_mass = [5:0x274e5907b60] &lt;dbl&gt; 
-\-avg_bmi = [6:0x274e5907fe0] &lt;dbl&gt; </code></pre>
+<pre><code>o [1:0x1f66c3e1928] &lt;tibble[,5]&gt; 
++-homeworld = [2:0x1f66f87da80] &lt;chr&gt; 
++-count = [3:0x1f66f3c4760] &lt;int&gt; 
++-avg_height = [4:0x1f66f87e080] &lt;dbl&gt; 
++-avg_mass = [5:0x1f66f87be00] &lt;dbl&gt; 
+\-avg_bmi = [6:0x1f66f87dc00] &lt;dbl&gt; </code></pre>
 </div>
 </div>
 <p>On peut ainsi observer :</p>
@@ -435,15 +435,15 @@ Attachement du package : 'arrow'</code></pre>
 <span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a>ar<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000274e375e400&gt;</code></pre>
+<pre><code>&lt;pointer: 0x000001f66a06ad30&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>ar_1<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000274e375e300&gt;</code></pre>
+<pre><code>&lt;pointer: 0x000001f66a06b170&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb45"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>ar_2<span class="sc">$</span><span class="fu">pointer</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000274e375e800&gt;</code></pre>
+<pre><code>&lt;pointer: 0x000001f66a06b370&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>ar</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">

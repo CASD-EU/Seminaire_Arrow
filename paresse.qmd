@@ -235,4 +235,4 @@ read_dir_time <- function(dir) {
 temps_total <- read_dir_time(emplacement_dataset)
 ```
 
-Lire l'intégralité des fichiers parquet dans C dure `r `temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.
+Lire l'intégralité des fichiers parquet dans C dure `r temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.
