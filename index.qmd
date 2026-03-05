@@ -5,3 +5,4 @@ title: "Webinaire arrow"
 Ce webinaire aborde le format de données Arrow et le compare aux formats usuels dans R.
 Pour en apprendre plus sur arrow, vous pouvez consulter le [site officiel](https://arrow.apache.org/).
 
+![](images/arrow-logo_horizontal_black-txt_white-bg.png)
