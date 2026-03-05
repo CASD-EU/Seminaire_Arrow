@@ -164,11 +164,13 @@ Lorsque l'on effectue des calculs sur une `arrow_table` (par exemple une table c
 On aurait donc pu écrire à la place (pour illustrer le passage par le format parquet) :
 
 ```{r}
+temp_parquet <- tempfile(fileext = ".parquet")
+
 starwars %>%
   select(name, height, mass, homeworld) %>%
-  write_parquet("starwars.parquet")
+  write_parquet(temp_parquet)
 
-read_parquet("starwars.parquet", as_data_frame = FALSE) %>%
+read_parquet(temp_parquet, as_data_frame = FALSE) %>%
   filter(! is.na(mass) & ! is.na(height)) %>%
   mutate(bmi = mass / (height/100)^2) %>%
   group_by(homeworld) %>%
@@ -399,8 +401,8 @@ ggplot(bench_nrow, aes(x = n_rows, y = time, color = expression)) +
   )
 ```
 
-Sur de petites données tabulaires... dplyr est plus rapide !
+Sur de petites données tabulaires... dplyr est plus rapide ! Mais lorsque l'on s'approche de l'ordre de grandeur de 10 millions d'observations, arrow devient plus intéressant.
 
 # Conclusion
 
-Arrow et R se ressemblent également dans le domaine du paradigme de calcul : ils se basent tous les deux sur l'axiome d'immutabilité des vecteurs, hérité d'une programmation fonctionnelle vectorielle. Ce n'est pas sur cet axe non plus qu'ils diffèrent. Sur une table de taille modérée, arrow n'impressionne pas non plus par sa plus grande performance.
+Arrow et R se ressemblent également dans le domaine du paradigme de calcul : ils se basent tous les deux sur l'axiome d'immutabilité des vecteurs, hérité d'une programmation fonctionnelle vectorielle. Ce n'est pas sur cet axe non plus qu'ils diffèrent. Sur des tables de données de taille faible, arrow n'est pas forcément plus intéressant que dplyr. Mais Arrow passe mieux à l'échelle, même sans utiliser les datasets que l'on verra dans la prochaine partie.
