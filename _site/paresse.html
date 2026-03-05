@@ -423,7 +423,7 @@ Attachement du package : 'dplyr'</code></pre>
 2 sans_scan  73139.</code></pre>
 </div>
 </div>
-<p>Il semble ici qu’en filtrant ou non, on obtient des performances similaires. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
+<p>Il semble ici qu’en filtrant ou non, on obtient des performances similaires en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inline)</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -486,7 +486,7 @@ Attachement du package : 'dplyr'</code></pre>
 <span id="cb22-59"><a href="#cb22-59" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-60"><a href="#cb22-60" aria-hidden="true" tabindex="-1"></a>temps_total <span class="ot">&lt;-</span> <span class="fu">read_dir_time</span>(emplacement_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Lire l’intégralité des fichiers parquet dans C dure 268.315 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse.</p>
+<p>Lire l’intégralité des fichiers parquet dans C sans même dure 268.315 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse.</p>
 
 
 </section>
