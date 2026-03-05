@@ -169,7 +169,7 @@ bench::mark(
   mutate(expression = as.character(expression))
 ```
 
-Il semble ici qu'en filtrant ou non, on obtient des performances similaires. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.
+Il semble ici qu'en filtrant ou non, on obtient des performances similaires en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.
 
 ```{r}
 #| cache: true
@@ -235,4 +235,4 @@ read_dir_time <- function(dir) {
 temps_total <- read_dir_time(emplacement_dataset)
 ```
 
-Lire l'intégralité des fichiers parquet dans C dure `r temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.
+Lire l'intégralité des fichiers parquet dans C sans même dure `r temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.
