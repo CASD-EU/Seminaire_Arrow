@@ -212,7 +212,7 @@ La librairie `Datasets` d'Arrow sait lire sélectivement les colonnes et lignes 
 
 > A filter can be provided with arrow::dataset::ScannerBuilder::Filter(), so that rows which do not match the filter predicate will not be included in the returned table. Again, some formats, such as Parquet, can use this filter to reduce the amount of I/O needed.
 
-Il est possible d'appeler explicitement les filtres appropriés puis de charger le résultat au format d'une *table* `arrow` (qui doit tenir en mémoire). Il est possible mais n'est pas garanti dans l'aide de Arrow que cette optimisation soit accomplie automatiquement par Acero en fonction des projections et filtres issus de l'`ExecPlan`.
+Il est possible d'appeler explicitement les filtres appropriés puis de charger le résultat au format d'une *table* `arrow` (qui doit tenir en mémoire). On veut montrer que cette approche est assez proche de l'utilisation d'une syntaxe dplyr agréable à l'usage et à l'oeil.
 
 Comparons et testons les deux approches.
 
@@ -322,4 +322,9 @@ read_dir_time <- function(dir) {
 temps_total <- read_dir_time(emplacement_dataset)
 ```
 
-Lire l'intégralité des fichiers parquet dans C sans même dure `r temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.
+Lire l'intégralité des fichiers parquet dans C sans même dure `r temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l'on observe [dans la documentation R d'arrow](https://arrow.apache.org/docs/r/articles/dataset.html).
+
+> Second, all work is pushed down to the individual data files, and depending on the file format, chunks of data within files. As a result, you can select a subset of data from a much larger data set by collecting the smaller slices from each file: you don’t have to load the whole data set in memory to slice from it.
+
+> Third, because of partitioning, you can ignore some files entirely. In this example, by filtering year == 2015, all files corresponding to other years are immediately excluded: you don’t have to load them in order to find that no rows match the filter. For Parquet files – which contain row groups with statistics on the data contained within groups – there may be entire chunks of data you can avoid scanning because they have no rows where total_amount > 100.
+

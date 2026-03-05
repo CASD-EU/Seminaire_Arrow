@@ -475,7 +475,7 @@ Tip
 <blockquote class="blockquote">
 <p>A filter can be provided with arrow::dataset::ScannerBuilder::Filter(), so that rows which do not match the filter predicate will not be included in the returned table. Again, some formats, such as Parquet, can use this filter to reduce the amount of I/O needed.</p>
 </blockquote>
-<p>Il est possible d’appeler explicitement les filtres appropriés puis de charger le résultat au format d’une <em>table</em> <code>arrow</code> (qui doit tenir en mémoire). Il est possible mais n’est pas garanti dans l’aide de Arrow que cette optimisation soit accomplie automatiquement par Acero en fonction des projections et filtres issus de l’<code>ExecPlan</code>.</p>
+<p>Il est possible d’appeler explicitement les filtres appropriés puis de charger le résultat au format d’une <em>table</em> <code>arrow</code> (qui doit tenir en mémoire). On veut montrer que cette approche est assez proche de l’utilisation d’une syntaxe dplyr agréable à l’usage et à l’oeil.</p>
 <p>Comparons et testons les deux approches.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="ot">&lt;-</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -576,7 +576,13 @@ Tip
 <span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>temps_total <span class="ot">&lt;-</span> <span class="fu">read_dir_time</span>(emplacement_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Lire l’intégralité des fichiers parquet dans C sans même dure 249.491 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse.</p>
+<p>Lire l’intégralité des fichiers parquet dans C sans même dure 249.491 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l’on observe <a href="https://arrow.apache.org/docs/r/articles/dataset.html">dans la documentation R d’arrow</a>.</p>
+<blockquote class="blockquote">
+<p>Second, all work is pushed down to the individual data files, and depending on the file format, chunks of data within files. As a result, you can select a subset of data from a much larger data set by collecting the smaller slices from each file: you don’t have to load the whole data set in memory to slice from it.</p>
+</blockquote>
+<blockquote class="blockquote">
+<p>Third, because of partitioning, you can ignore some files entirely. In this example, by filtering year == 2015, all files corresponding to other years are immediately excluded: you don’t have to load them in order to find that no rows match the filter. For Parquet files – which contain row groups with statistics on the data contained within groups – there may be entire chunks of data you can avoid scanning because they have no rows where total_amount &gt; 100.</p>
+</blockquote>
 
 
 </section>
