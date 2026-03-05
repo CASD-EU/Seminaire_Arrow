@@ -1,5 +1,7 @@
 ---
 title: "Évaluation paresseuse"
+params:
+  chemin_dataset: "\\\\samusaran\\SHARE\\IT\\DSCIENCE\\92_DATASETS\\openamir_webinaire_arrow"
 ---
 
 # R et évaluation paresseuse
@@ -85,14 +87,14 @@ open_dataset(emplacement_parquet) %>%
   show_query()
 ```
 
-## La notion de stream
+## La notion de stream : Paresse sur les fichiers
 
 Le réel apport d'Apache Acero concerne la notion de stream. La paresse des ExecPlan permet de dépendre de *plusieurs* fichiers *.parquet* qui ne sont pas encore chargés en mémoire, et dont la somme des tailles dépasserait largement la mémoire s'ils étaient chargés. Il permet de les gérer comme une table à travers une abstraction bien commode.
 
 ```{r}
 #| echo: false
 #| results: false
-emplacement_dataset <- "\\\\samusaran\\SHARE\\IT\\DSCIENCE\\92_DATASETS\\openamir_webinaire_arrow"
+emplacement_dataset <- params$chemin_dataset
 ```
 
 ```{r}
@@ -102,8 +104,135 @@ emplacement_dataset <- "[emplacement du dataset]"
 ```
 
 ```{r}
+#| cache: true
 open_dataset(emplacement_dataset) %>%
   group_by(annee, mois) %>%
   summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
   collect()
 ```
+
+Ici, on a requêté 7 ans d'opendamir, l'équivalent d'environ 168Go de csv, en utilisant une simple abstraction globale.
+
+Il est clair que cette requête n'aurait pas pu être faite dans R.
+
+## Paresse sur la lecture de colonnes et de lignes
+
+La librairie `Datasets` d'Arrow sait lire sélectivement les colonnes et lignes pour économiser l'IO et la RAM, comme on peut le lire dans la [documentation d'Arrow Datasets](https://arrow.apache.org/docs/cpp/dataset.html).
+
+> When combining filters and projections, Arrow will determine all necessary columns to read. For instance, if you filter on a column that isn’t ultimately selected, Arrow will still read the column to evaluate the filter.
+
+> Some formats, such as Parquet, can reduce I/O costs here by reading only the specified columns from the filesystem.
+
+> A filter can be provided with arrow::dataset::ScannerBuilder::Filter(), so that rows which do not match the filter predicate will not be included in the returned table. Again, some formats, such as Parquet, can use this filter to reduce the amount of I/O needed.
+
+Il est possible d'appeler explicitement les filtres appropriés puis de charger le résultat au format d'une *table* `arrow` (qui doit tenir en mémoire). Il est possible mais n'est pas garanti dans l'aide de Arrow que cette optimisation soit accomplie automatiquement par Acero en fonction des projections et filtres issus de l'`ExecPlan`.
+
+Comparons et testons les deux approches.
+
+```{r}
+#| echo: false
+#| results: false
+emplacement_dataset <- params$chemin_dataset
+```
+
+```{r}
+#| echo: true
+#| eval: false
+emplacement_dataset <- "[emplacement du dataset]"
+```
+
+```{r}
+#| cache: true
+library(bench)
+ds <- open_dataset(emplacement_dataset)
+
+bench::mark(
+  avec_scan = Scanner$create(ds,
+                             filter = Expression$field_ref("annee") <= Expression$scalar(2020),
+                             projection = c("annee", "mois", "FLT_PAI_MNT"))$
+    ToTable() %>%
+    group_by(annee, mois) %>%
+    summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
+    collect(),
+  sans_scan = ds %>%
+    filter(annee <= 2020) %>%
+    select(annee, mois, FLT_PAI_MNT) %>%
+    group_by(annee, mois) %>%
+    summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
+    collect(),
+  iterations  = 5L,
+  check = FALSE,
+  memory = FALSE,
+  filter_gc = FALSE,
+  time_unit = "ms"
+) %>% select(expression, median) %>%
+  mutate(expression = as.character(expression))
+```
+
+Il semble ici qu'en filtrant ou non, on obtient des performances similaires. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.
+
+```{r}
+#| cache: true
+library(inline)
+
+# C code pour lire un seul fichier et mesurer le temps
+src <- '
+if(TYPEOF(path) != STRSXP || LENGTH(path) != 1)
+    Rf_error("path must be character(1)");
+
+const char *filepath = CHAR(STRING_ELT(path, 0));
+size_t buffer_size = 4 * 1024 * 1024; // 4 MB
+char *buffer = (char*) calloc(buffer_size, 1);
+if(!buffer) Rf_error("Memory allocation failed");
+
+clock_t start = clock();
+
+FILE *fp = fopen(filepath, "rb");
+if(fp) {
+    while(fread(buffer, 1, buffer_size, fp) > 0) {
+        // lecture uniquement
+    }
+    fclose(fp);
+}
+
+clock_t end = clock();
+free(buffer);
+
+double read_time = (double)(end - start) / CLOCKS_PER_SEC;
+
+SEXP result = PROTECT(Rf_allocVector(REALSXP, 1));
+REAL(result)[0] = read_time;
+UNPROTECT(1);
+
+return result;
+'
+
+includes = "
+#include <R.h>
+#include <Rinternals.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+"
+read_file_time <- cfunction(signature(path = "character"), src, includes = includes)
+
+read_dir_time <- function(dir) {
+  files <- list.files(dir, full.names = TRUE)
+  total_time <- 0
+  
+  for(f in files) {
+    if(file.info(f)$isdir) {
+      total_time <- total_time + read_dir_time(f)
+    } else {
+      total_time <- total_time + read_file_time(f)
+    }
+  }
+  
+  return(total_time)
+}
+
+temps_total <- read_dir_time(emplacement_dataset)
+```
+
+Lire l'intégralité des fichiers parquet dans C dure `r `temps_total` secondes. Cela semble prouver que l'exécution des `ExecPlan` est naturellement parcimonieuse.

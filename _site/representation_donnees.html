@@ -519,22 +519,22 @@ Tip
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_adresse</span>(v, <span class="dv">0</span>L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000271847dee10&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000029318e65e20&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_adresse</span>(v, <span class="dv">1</span>L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000271847dee10&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000029318e65e20&gt;</code></pre>
 </div>
 </div>
 <p>Ici, l’adresse du premier terme <code>"arnaud"</code> est similaire à celle du deuxième <code>"arnaud"</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_adresse</span>(v, <span class="dv">2</span>L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000271847ded68&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000029318e65d78&gt;</code></pre>
 </div>
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">get_adresse</span>(v, <span class="dv">4</span>L)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;pointer: 0x00000271847ded68&gt;</code></pre>
+<pre><code>&lt;pointer: 0x0000029318e65d78&gt;</code></pre>
 </div>
 </div>
 <p>De même, les deux <code>"titouan"</code> ont même adresse.</p>
@@ -554,7 +554,7 @@ Tip
 <pre><code>[1] "arnaud"</code></pre>
 </div>
 </div>
-<p>En construisant un nouveau vecteur character dans C à partir de la valeur pointée par &lt;pointer: 0x00000271847dee10&gt;, on peut vérifiée que l’adresse pointe bien vers une chaine de caractères C qui contient arnaud. Nous avons illustré la présence de la <em>global string pool</em>.</p>
+<p>En construisant un nouveau vecteur character dans C à partir de la valeur pointée par &lt;pointer: 0x0000029318e65e20&gt;, on peut vérifiée que l’adresse pointe bien vers une chaine de caractères C qui contient arnaud. Nous avons illustré la présence de la <em>global string pool</em>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="fu">object.size</span>(<span class="fu">rep</span>(v, <span class="dv">10000</span>L)) <span class="sc">/</span> <span class="dv">10000</span>L <span class="co"># 5 * 8 bytes pointeur</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
