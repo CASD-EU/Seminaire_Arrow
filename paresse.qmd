@@ -92,7 +92,7 @@ Le réel apport d'Apache Acero concerne la notion de stream. La paresse des Exec
 ```{r}
 #| echo: false
 #| results: false
-emplacement_dataset <- "C:\\Users\\afeldmann\\Desktop\\openamir_webinaire_arrow"
+emplacement_dataset <- "\\\\samusaran\\SHARE\\IT\\DSCIENCE\\92_DATASETS\\openamir_webinaire_arrow"
 ```
 
 ```{r}
