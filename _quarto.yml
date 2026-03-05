@@ -11,7 +11,9 @@ website:
       - href: representation_donnees.qmd
         text: Représentation des données
       - href: immutabilite.qmd
-        text: Immutabilité dans R
+        text: Immutabilité
+      - href: paresse.qmd
+        text: Évaluation paresseuse
     search: false
 
 format:

@@ -2,3 +2,108 @@
 title: "Évaluation paresseuse"
 ---
 
+# R et évaluation paresseuse
+
+R est fainéant. Il n'évaluera les *arguments* d'une fonction qu'au dernier moment s'il en a besoin (*évaluation paresseuse des arguments*). 
+
+```{r}
+lazy_eval <-
+  function(x = stop("C'est une erreur !"),
+           y = matrix(1:9, nrow = -3L)) {
+    TRUE
+  }
+lazy_eval()
+```
+
+Dans l'exemple précédent, si les arguments n'étaient pas évalués de manière paresseuse, autant l'évaluation de `x` que celle de `y` précipiterait une erreur :
+
+* celle de `x` car `stop()` est la fonction de R permettant de stopper l'exécution et de retourner une erreur avec le message fourni.
+* celle de `y` car une matrice avec un nombre de lignes négatifs, ça n'existe pas.
+
+Mais le corps de la fonction `lazy_eval` étant réduit à son plus simple appareil, à savoir simplement `TRUE`, il ne requiert pas d'en évaluer les arguments. Il n'y a donc aucune erreur d'exécution et la fonction retourne bien `TRUE` !
+
+
+Plus généralement, dans R, les expressions employant des contrôle (`if`, `else`...) définissent elles aussi une forme de paresse dans la mesure où leurs sous-parties non-retenues ne sont pas évaluées (*évaluation paresseuse des structures de contrôle*). À l'intérieur même des expressions, les expressions faites d'opérateurs logiques unitaires (`&&` et `||` mais pas `&` ni `|` qui sont vectoriels) évaluent elles aussi le moins possible de leurs sous-parties (*court-circuit*). Si vous voulez en savoir plus, vous pouvez faire [cette formation](https://arnaud-feldmann.github.io/formation_r_drieets_prog_fonctionnelle/) sur la programmation fonctionnelle en R.
+
+# Apache Acero
+
+Apache Acero reprend ce principe d'évaluation paresseuse grandement utile dans la programmation fonctionnelle, et l'étend à d'autres champs.
+
+## ExecPlan
+
+```{r}
+library(arrow)
+library(dplyr)
+
+query <-
+  starwars %>%
+  as_arrow_table() %>%
+  select(name, height, mass, homeworld) %>%
+  filter(! is.na(mass) & ! is.na(height)) %>%
+  mutate(bmi = mass / (height/100)^2) %>%
+  group_by(homeworld) %>%
+  summarise(
+    count = n(),
+    avg_height = mean(height),
+    avg_mass = mean(mass),
+    avg_bmi = mean(bmi)
+  ) %>%
+  arrange(desc(avg_bmi))
+
+show_query(query)
+```
+
+Nous l'avions déjà vu dans le précédent chapitre précédent. Tant qu'on n'applique pas la fonction `collect()`, une pipeline en *Apache Acero* n'est rien de plus qu'un `ExecPlan`, donc rien n'est exécuté.
+
+```{r}
+query %>%
+  collect()
+```
+
+`collect()` permet effectivement d'effectuer la requête
+
+```{r}
+
+emplacement_parquet <- paste0(tempdir(), "\\dataset")
+
+dir.create(emplacement_parquet, showWarnings = FALSE)
+
+starwars %>%
+  write_parquet(paste0(emplacement_parquet, "\\starwars.parquet"))
+
+open_dataset(emplacement_parquet) %>%
+  filter(! is.na(mass) & ! is.na(height)) %>%
+  mutate(bmi = mass / (height/100)^2) %>%
+  group_by(homeworld) %>%
+  summarise(
+    count = n(),
+    avg_height = mean(height),
+    avg_mass = mean(mass),
+    avg_bmi = mean(bmi)
+  ) %>%
+  arrange(desc(avg_bmi)) %>%
+  show_query()
+```
+
+## La notion de stream
+
+Le réel apport d'Apache Acero concerne la notion de stream. La paresse des ExecPlan permet de dépendre de *plusieurs* fichiers *.parquet* qui ne sont pas encore chargés en mémoire, et dont la somme des tailles dépasserait largement la mémoire s'ils étaient chargés. Il permet de les gérer comme une table à travers une abstraction bien commode.
+
+```{r}
+#| echo: false
+#| results: false
+emplacement_dataset <- "C:\\Users\\afeldmann\\Desktop\\openamir_webinaire_arrow"
+```
+
+```{r}
+#| echo: true
+#| eval: false
+emplacement_dataset <- "[emplacement du dataset]"
+```
+
+```{r}
+open_dataset(emplacement_dataset) %>%
+  group_by(annee, mois) %>%
+  summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
+  collect()
+```
