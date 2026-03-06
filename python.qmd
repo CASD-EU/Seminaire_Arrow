@@ -1,0 +1,55 @@
+---
+title: "Démonstration Apache Arrow en Python"
+format: html
+jupyter: python3
+---
+
+# Introduction
+
+Dans cette démonstration, nous allons explorer comment Apache Arrow peut être utilisé pour traiter des fichiers CSV et Parquet, même lorsque ces derniers sont trop volumineux pour tenir en mémoire. Nous allons montrer :
+
+1. Comment charger un fichier CSV en mémoire avec Arrow et effectuer un tri.
+2. Comment utiliser l'API `pyarrow.dataset` pour travailler avec un fichier Parquet trop grand pour la mémoire, appliquer des filtres et des agrégations, et convertir les résultats en un DataFrame Pandas.
+
+# Chargement d'un fichier CSV avec Arrow
+
+```python
+import pyarrow.csv as csv
+import pyarrow.compute as pc
+
+# Charger un fichier CSV en mémoire
+csv_file = "example.csv"  # Remplacez par le chemin de votre fichier CSV
+table = csv.read_csv(csv_file)
+
+# Trier les données par une colonne spécifique
+sorted_table = table.sort_by("colonne_a_trier")
+print(sorted_table)
+```
+
+# Traitement d'un fichier Parquet trop grand pour la mémoire
+
+```python
+import pyarrow.dataset as ds
+import pyarrow.compute as pc
+import pandas as pd
+
+# Charger un dataset Parquet
+parquet_file = "large_dataset.parquet"  # Remplacez par le chemin de votre fichier Parquet
+dataset = ds.dataset(parquet_file, format="parquet")
+
+# Appliquer des filtres et des agrégations
+filtered = dataset.to_table(filter=pc.field("colonne_filtre") > 1000)
+agregated = filtered.group_by("colonne_groupe").aggregate(
+    [
+        ("colonne_valeur", "sum")
+    ]
+)
+
+# Convertir en DataFrame Pandas pour une analyse ultérieure
+pandas_df = agregated.to_pandas()
+print(pandas_df)
+```
+
+# Conclusion
+
+Apache Arrow offre une solution efficace pour traiter des fichiers volumineux, en permettant d'appliquer des filtres et des agrégations directement sur des fichiers Parquet sans les charger entièrement en mémoire. Cela permet de réduire la taille des données et de les convertir en DataFrame Pandas pour une analyse plus approfondie.
