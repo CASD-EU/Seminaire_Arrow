@@ -129,7 +129,7 @@ Si on tape `-2147483648L` dans une console R, il y a un warning, et le type de d
 object.size(rep(v, 10000L)) / 10000L # 6 * 4 bytes de int32
 ```
 
-La taille du vecteur v est de 24 octets, car il contient 6 entier 32 bits.
+La taille du vecteur `v` est de 24 octets, car il contient 6 entier 32 bits.
 
 ## Sous Arrow
 
@@ -240,7 +240,7 @@ adresse <- get_adresse(v, 0L)
 get_string(adresse)
 ```
 
-En construisant un nouveau vecteur character dans C à partir de la valeur pointée par `{r} capture.output(print(adresse))`, on peut vérifiée que l'adresse pointe bien vers une chaine de caractères C qui contient `{r} get_string(adresse)`. Nous avons illustré la présence de la *global string pool*.
+En construisant un nouveau vecteur character dans C à partir de la valeur pointée par `{r} capture.output(print(adresse))`, on peut vérifier que l'adresse pointe bien vers une chaine de caractères C qui contient `{r} get_string(adresse)`. Nous avons illustré la présence de la *global string pool*.
 
 ```{r}
 object.size(rep(v, 10000L)) / 10000L # 5 * 8 bytes pointeur
