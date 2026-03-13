@@ -2,13 +2,16 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.25">
+<meta name="generator" content="quarto-1.9.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
 <title>Évaluation paresseuse – Webinaire Arrow</title>
 <style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
 div.columns{display: flex; gap: min(4vw, 1.5em);}
@@ -67,15 +70,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <meta name="quarto:offset" content="./">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
-<script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-7b89279ff1a6dce999919e0e67d4d9ec.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-6d4e4c6c342646cac9792aff734a6985.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-e31584831b205ffbb2d98406f31c2a5b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -128,8 +130,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      </a>
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">Webinaire Arrow</a> 
+    </div>
       </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
@@ -488,38 +491,40 @@ Tip
 </div>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bench)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(emplacement_dataset)</span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">avec_scan =</span> Scanner<span class="sc">$</span><span class="fu">create</span>(ds,</span>
-<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">filter =</span> Expression<span class="sc">$</span><span class="fu">field_ref</span>(<span class="st">"annee"</span>) <span class="sc">&lt;=</span> Expression<span class="sc">$</span><span class="fu">scalar</span>(<span class="dv">2020</span>),</span>
-<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">projection =</span> <span class="fu">c</span>(<span class="st">"annee"</span>, <span class="st">"mois"</span>, <span class="st">"FLT_PAI_MNT"</span>))<span class="sc">$</span></span>
-<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ToTable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
-<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
-<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sans_scan =</span> ds <span class="sc">%&gt;%</span></span>
-<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(annee <span class="sc">&lt;=</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(annee, mois, FLT_PAI_MNT) <span class="sc">%&gt;%</span></span>
-<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
-<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
-<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
-<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">iterations  =</span> <span class="dv">5</span>L,</span>
-<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
-<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
-<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(emplacement_dataset)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">avec_scan =</span> Scanner<span class="sc">$</span><span class="fu">create</span>(ds,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">filter =</span> Expression<span class="sc">$</span><span class="fu">field_ref</span>(<span class="st">"annee"</span>) <span class="sc">&lt;=</span> Expression<span class="sc">$</span><span class="fu">scalar</span>(<span class="dv">2019</span>L),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">projection =</span> <span class="fu">c</span>(<span class="st">"annee"</span>, <span class="st">"mois"</span>, <span class="st">"FLT_PAI_MNT"</span>))<span class="sc">$</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ToTable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">sans_scan =</span> ds <span class="sc">%&gt;%</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(annee <span class="sc">&lt;=</span> <span class="dv">2019</span>L) <span class="sc">%&gt;%</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(annee, mois, FLT_PAI_MNT) <span class="sc">%&gt;%</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">iterations  =</span> <span class="dv">2</span>L,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 x 2
   expression median
   &lt;chr&gt;       &lt;dbl&gt;
-1 avec_scan  67606.
-2 sans_scan  73278.</code></pre>
+1 avec_scan  52354.
+2 sans_scan  19964.</code></pre>
 </div>
 </div>
-<p>Il semble ici qu’en filtrant ou non, on obtient des performances similaires en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
+<p>Il semble ici qu’en filtrant ou non, on obtient des performances encore meilleures sans scan, en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inline)</span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -582,7 +587,7 @@ Tip
 <span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>temps_total <span class="ot">&lt;-</span> <span class="fu">read_dir_time</span>(emplacement_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Lire l’intégralité des fichiers parquet dans C sans même dure 249.491 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l’on observe <a href="https://arrow.apache.org/docs/r/articles/dataset.html">dans la documentation R d’arrow</a>.</p>
+<p>Lire l’intégralité des fichiers parquet dans C sans même dure 74.67 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l’on observe <a href="https://arrow.apache.org/docs/r/articles/dataset.html">dans la documentation R d’arrow</a>.</p>
 <blockquote class="blockquote">
 <p>Second, all work is pushed down to the individual data files, and depending on the file format, chunks of data within files. As a result, you can select a subset of data from a much larger data set by collecting the smaller slices from each file: you don’t have to load the whole data set in memory to slice from it.</p>
 </blockquote>

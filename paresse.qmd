@@ -1,7 +1,7 @@
 ---
 title: "Évaluation paresseuse"
 params:
-  chemin_dataset: "\\\\samusaran\\SHARE\\IT\\DSCIENCE\\92_DATASETS\\openamir_webinaire_arrow"
+  chemin_dataset: "C:\\Users\\afeldmann\\Desktop\\openamir"
 ---
 
 # R et évaluation paresseuse
@@ -231,23 +231,25 @@ emplacement_dataset <- "[emplacement du dataset]"
 ```{r}
 #| cache: true
 library(bench)
+library(arrow)
+library(dplyr)
 ds <- open_dataset(emplacement_dataset)
 
 bench::mark(
   avec_scan = Scanner$create(ds,
-                             filter = Expression$field_ref("annee") <= Expression$scalar(2020),
+                             filter = Expression$field_ref("annee") <= Expression$scalar(2019L),
                              projection = c("annee", "mois", "FLT_PAI_MNT"))$
     ToTable() %>%
     group_by(annee, mois) %>%
     summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
     collect(),
   sans_scan = ds %>%
-    filter(annee <= 2020) %>%
+    filter(annee <= 2019L) %>%
     select(annee, mois, FLT_PAI_MNT) %>%
     group_by(annee, mois) %>%
     summarise(FLT_PAI_MNT = sum(FLT_PAI_MNT)) %>%
     collect(),
-  iterations  = 5L,
+  iterations  = 2L,
   check = FALSE,
   memory = FALSE,
   filter_gc = FALSE,
@@ -256,7 +258,7 @@ bench::mark(
   mutate(expression = as.character(expression))
 ```
 
-Il semble ici qu'en filtrant ou non, on obtient des performances similaires en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.
+Il semble ici qu'en filtrant ou non, on obtient des performances encore meilleures sans scan, en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.
 
 ```{r}
 #| cache: true

@@ -1,7 +1,6 @@
 ---
 title: "Démonstration Apache Arrow en Python"
 format: html
-jupyter: python3
 ---
 
 # Introduction
@@ -13,7 +12,8 @@ Dans cette démonstration, nous allons explorer comment Apache Arrow peut être 
 
 # Chargement d'un fichier CSV avec Arrow
 
-```python
+```{python}
+#| eval: false
 import pyarrow.csv as csv
 import pyarrow.compute as pc
 
@@ -28,7 +28,8 @@ print(sorted_table)
 
 # Traitement d'un fichier Parquet trop grand pour la mémoire
 
-```python
+```{python}
+#| eval: false
 import pyarrow.dataset as ds
 import pyarrow.compute as pc
 import pandas as pd
