@@ -11,18 +11,22 @@ Dans cette démonstration, nous allons explorer comment Apache Arrow peut être 
 1. Comment charger un fichier CSV en mémoire avec Arrow et effectuer un tri.
 2. Comment utiliser l'API `pyarrow.dataset` pour travailler avec un fichier Parquet trop grand pour la mémoire, appliquer des filtres et des agrégations, et convertir les résultats en un DataFrame Pandas.
 
+
+```python
+! pip install pyarrow
+! pip install pandas
+
+import pyarrow.csv as csv
+```
+
 # Chargement d'un fichier CSV avec Arrow
 
 ```python
-import pyarrow.csv as csv
-import pyarrow.compute as pc
-
-# Charger un fichier CSV en mémoire
-csv_file = "example.csv"  # Remplacez par le chemin de votre fichier CSV
+csv_file = "data1.csv"
 table = csv.read_csv(csv_file)
 
 # Trier les données par une colonne spécifique
-sorted_table = table.sort_by("colonne_a_trier")
+sorted_table = table.sort_by("name")
 print(sorted_table)
 ```
 
@@ -34,22 +38,51 @@ import pyarrow.compute as pc
 import pandas as pd
 
 # Charger un dataset Parquet
-parquet_file = "large_dataset.parquet"  # Remplacez par le chemin de votre fichier Parquet
-dataset = ds.dataset(parquet_file, format="parquet")
+parquet_file = "C:\\Users\\trigaud\\Documents\\DEV\\DemoArrow\\openamir_webinaire_arrow" 
+dataset = ds.dataset(parquet_file, format="parquet", partitioning="hive")
 
 # Appliquer des filtres et des agrégations
-filtered = dataset.to_table(filter=pc.field("colonne_filtre") > 1000)
-agregated = filtered.group_by("colonne_groupe").aggregate(
-    [
-        ("colonne_valeur", "sum")
-    ]
-)
-
-# Convertir en DataFrame Pandas pour une analyse ultérieure
-pandas_df = agregated.to_pandas()
-print(pandas_df)
+filtered = dataset.filter(pc.field("BEN_SEX_COD") == "1")
 ```
 
-# Conclusion
+## La lazy evaluation :
 
-Apache Arrow offre une solution efficace pour traiter des fichiers volumineux, en permettant d'appliquer des filtres et des agrégations directement sur des fichiers Parquet sans les charger entièrement en mémoire. Cela permet de réduire la taille des données et de les convertir en DataFrame Pandas pour une analyse plus approfondie.
+Le code de la cellule précédente était instantanée et celui qui vient produit un résultat, il va donc le déclencher
+
+```python
+filtered.count_rows()
+filtered.head(20)
+```
+
+## Faire une aggregation sur une table dépassant la mémoire avec Acero :
+
+```python
+import pyarrow.acero as acero
+
+
+scan = acero.Declaration(
+    "scan",
+    acero.ScanNodeOptions(dataset)
+)
+
+aggregate = acero.Declaration(
+    "aggregate",
+    acero.AggregateNodeOptions(
+        aggregates=[("FLT_PAI_MNT", "hash_sum", None, "FLT_PAI_MNT2")],
+        keys=["annee", "mois"]
+    ),
+    inputs=[scan]
+)
+
+table = aggregate.to_table()
+
+print(table)
+```
+
+## Conversion en pandas
+
+```python
+# Convertir en DataFrame Pandas
+pandas_df = table.to_pandas()
+print(pandas_df)
+```
