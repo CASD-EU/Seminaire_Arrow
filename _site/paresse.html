@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.9.29">
+<meta name="generator" content="quarto-1.9.33">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dfa48a90d809c806c7ea2d5aecd9fc66.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-6d4e4c6c342646cac9792aff734a6985.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-a0f9fd0d421825b736dc1bbcbcba2219.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
@@ -160,6 +160,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">Évaluation paresseuse</span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./python.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Démonstration Apache Arrow en Python</span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -232,48 +238,45 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The tzdb package is not installed. Timezones will not be available to Arrow compute functions.</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'arrow'</code></pre>
+Attachement du package : 'arrow'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The following object is masked from 'package:utils':
+<pre><code>L'objet suivant est masqué depuis 'package:utils':
 
     timestamp</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attaching package: 'dplyr'</code></pre>
+Attachement du package : 'dplyr'</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:stats':
+<pre><code>Les objets suivants sont masqués depuis 'package:stats':
 
     filter, lag</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>The following objects are masked from 'package:base':
+<pre><code>Les objets suivants sont masqués depuis 'package:base':
 
     intersect, setdiff, setequal, union</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">%&gt;%</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_arrow_table</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, height, mass, homeworld) <span class="sc">%&gt;%</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(mass) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(height)) <span class="sc">%&gt;%</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> mass <span class="sc">/</span> (height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_height =</span> <span class="fu">mean</span>(height),</span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_mass =</span> <span class="fu">mean</span>(mass),</span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_bmi =</span> <span class="fu">mean</span>(bmi)</span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_bmi))</span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="fu">show_query</span>(query)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>query <span class="ot">&lt;-</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  starwars <span class="sc">%&gt;%</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">as_arrow_table</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(name, height, mass, homeworld) <span class="sc">%&gt;%</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(mass) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(height)) <span class="sc">%&gt;%</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> mass <span class="sc">/</span> (height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_height =</span> <span class="fu">mean</span>(height),</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_mass =</span> <span class="fu">mean</span>(mass),</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_bmi =</span> <span class="fu">mean</span>(bmi)</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_bmi))</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a><span class="fu">show_query</span>(query)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ExecPlan with 6 nodes:
 5:SinkNode{}
@@ -291,10 +294,10 @@ Attaching package: 'dplyr'</code></pre>
 </div>
 <p>Nous l’avions déjà vu dans le précédent chapitre précédent. Tant qu’on n’applique pas la fonction <code>collect()</code>, une pipeline en <em>Apache Acero</em> n’est rien de plus qu’un <code>ExecPlan</code>, donc rien n’est exécuté.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>query <span class="sc">%&gt;%</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>query <span class="sc">%&gt;%</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 40 × 5
+<pre><code># A tibble: 40 x 5
    homeworld  count avg_height avg_mass avg_bmi
    &lt;chr&gt;      &lt;int&gt;      &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;
  1 Nal Hutta      1        175   1358     443. 
@@ -307,30 +310,30 @@ Attaching package: 'dplyr'</code></pre>
  8 Tatooine       8        169     85.4    29.3
  9 Sullust        1        160     68      26.6
 10 Dathomir       1        175     80      26.1
-# ℹ 30 more rows</code></pre>
+# i 30 more rows</code></pre>
 </div>
 </div>
 <p><code>collect()</code> permet effectivement d’effectuer la requête</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>emplacement_parquet <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">tempdir</span>(), <span class="st">"</span><span class="sc">\\</span><span class="st">dataset"</span>)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(emplacement_parquet, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
-<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_parquet</span>(<span class="fu">paste0</span>(emplacement_parquet, <span class="st">"</span><span class="sc">\\</span><span class="st">starwars.parquet"</span>))</span>
-<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="fu">open_dataset</span>(emplacement_parquet) <span class="sc">%&gt;%</span></span>
-<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(mass) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(height)) <span class="sc">%&gt;%</span></span>
-<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> mass <span class="sc">/</span> (height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span></span>
-<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
-<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
-<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_height =</span> <span class="fu">mean</span>(height),</span>
-<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_mass =</span> <span class="fu">mean</span>(mass),</span>
-<span id="cb15-16"><a href="#cb15-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_bmi =</span> <span class="fu">mean</span>(bmi)</span>
-<span id="cb15-17"><a href="#cb15-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
-<span id="cb15-18"><a href="#cb15-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_bmi)) <span class="sc">%&gt;%</span></span>
-<span id="cb15-19"><a href="#cb15-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_query</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>emplacement_parquet <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="fu">tempdir</span>(), <span class="st">"</span><span class="sc">\\</span><span class="st">dataset"</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="fu">dir.create</span>(emplacement_parquet, <span class="at">showWarnings =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>starwars <span class="sc">%&gt;%</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">write_parquet</span>(<span class="fu">paste0</span>(emplacement_parquet, <span class="st">"</span><span class="sc">\\</span><span class="st">starwars.parquet"</span>))</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="fu">open_dataset</span>(emplacement_parquet) <span class="sc">%&gt;%</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(<span class="sc">!</span> <span class="fu">is.na</span>(mass) <span class="sc">&amp;</span> <span class="sc">!</span> <span class="fu">is.na</span>(height)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">bmi =</span> mass <span class="sc">/</span> (height<span class="sc">/</span><span class="dv">100</span>)<span class="sc">^</span><span class="dv">2</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(homeworld) <span class="sc">%&gt;%</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>    <span class="at">count =</span> <span class="fu">n</span>(),</span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_height =</span> <span class="fu">mean</span>(height),</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_mass =</span> <span class="fu">mean</span>(mass),</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">avg_bmi =</span> <span class="fu">mean</span>(bmi)</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">%&gt;%</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(avg_bmi)) <span class="sc">%&gt;%</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>  <span class="fu">show_query</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>ExecPlan with 6 nodes:
 5:SinkNode{}
@@ -361,93 +364,93 @@ Tip
 <div class="callout-body-container callout-body">
 <p>Le dataset parquet manipulé par la suite est issu de sept années d’<a href="https://www.assurance-maladie.ameli.fr/etudes-et-donnees/open-damir-depenses-sante-interregimes">opendamir</a> (2018 à 2024 inclus), transformé en dataset via le script ci-dessous :</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>schema_readr <span class="ot">&lt;-</span> <span class="fu">cols_only</span>(</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLX_ANN_MOI =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ORG_CLE_REG =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">AGE_BEN_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_RES_REG =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_CMU_TOP =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_QLT_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_SEX_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">DDP_SPE_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_CAT_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_REG_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_TYP_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETP_REG_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETP_CAT_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">MDT_TYP_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">MFT_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_FJH_TYP =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_COG =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_NBR =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_QTE =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_DEP_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PAI_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_BSE =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_COG =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_NBR =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_QTE =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_PAI_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_DEP_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_REM_MNT =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">SOI_ANN =</span> <span class="fu">col_integer</span>(),</span>
-<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">SOI_MOI =</span> <span class="fu">col_integer</span>(),</span>
-<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">ASU_NAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">ATT_NAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">CPL_COD =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">CPT_ENV_TYP =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-38"><a href="#cb17-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">DRG_AFF_NAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-39"><a href="#cb17-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_IND_TAA =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-40"><a href="#cb17-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">EXO_MTF =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-41"><a href="#cb17-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">MTM_NAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-42"><a href="#cb17-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_NAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-43"><a href="#cb17-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PPU_SEC =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-44"><a href="#cb17-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_TAU =</span> <span class="fu">col_double</span>(),</span>
-<span id="cb17-45"><a href="#cb17-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_TYP =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-46"><a href="#cb17-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PDS_QCP =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-47"><a href="#cb17-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">EXE_INS_REG =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-48"><a href="#cb17-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_ACT_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-49"><a href="#cb17-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_ACT_CAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-50"><a href="#cb17-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_SPE_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-51"><a href="#cb17-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_STJ_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-52"><a href="#cb17-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRE_INS_REG =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-53"><a href="#cb17-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_ACT_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-54"><a href="#cb17-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_ACT_CAT =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-55"><a href="#cb17-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_SPE_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-56"><a href="#cb17-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_STJ_SNDS =</span> <span class="fu">col_character</span>(),</span>
-<span id="cb17-57"><a href="#cb17-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">TOP_PS5_TRG =</span> <span class="fu">col_character</span>()</span>
-<span id="cb17-58"><a href="#cb17-58" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb17-59"><a href="#cb17-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-60"><a href="#cb17-60" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="fu">list.files</span>(input_csv),</span>
-<span id="cb17-61"><a href="#cb17-61" aria-hidden="true" tabindex="-1"></a>       <span class="cf">function</span>(nom_csv) {</span>
-<span id="cb17-62"><a href="#cb17-62" aria-hidden="true" tabindex="-1"></a>         annee <span class="ot">&lt;-</span> <span class="fu">substr</span>(nom_csv, <span class="dv">2</span>L, <span class="dv">5</span>L)</span>
-<span id="cb17-63"><a href="#cb17-63" aria-hidden="true" tabindex="-1"></a>         mois <span class="ot">&lt;-</span> <span class="fu">substr</span>(nom_csv, <span class="dv">6</span>L, <span class="dv">7</span>L)</span>
-<span id="cb17-64"><a href="#cb17-64" aria-hidden="true" tabindex="-1"></a>         dest_parquet <span class="ot">&lt;-</span> <span class="fu">file.path</span>(input_parquet, <span class="fu">paste0</span>(<span class="st">"annee="</span>, annee), <span class="fu">paste0</span>(<span class="st">"mois="</span>, mois))</span>
-<span id="cb17-65"><a href="#cb17-65" aria-hidden="true" tabindex="-1"></a>         <span class="fu">dir.create</span>(dest_parquet, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb17-66"><a href="#cb17-66" aria-hidden="true" tabindex="-1"></a>         write_chunk_to_parquet <span class="ot">&lt;-</span> <span class="cf">function</span>(x, pos)  {</span>
-<span id="cb17-67"><a href="#cb17-67" aria-hidden="true" tabindex="-1"></a>           <span class="fu">write_parquet</span>(x, <span class="fu">file.path</span>(dest_parquet, <span class="fu">paste0</span>(<span class="fu">sprintf</span>(<span class="st">"%020d"</span>, pos), <span class="st">".parquet"</span>)))</span>
-<span id="cb17-68"><a href="#cb17-68" aria-hidden="true" tabindex="-1"></a>         }</span>
-<span id="cb17-69"><a href="#cb17-69" aria-hidden="true" tabindex="-1"></a>         <span class="fu">read_csv2_chunked</span>(<span class="at">file =</span> <span class="fu">file.path</span>(input_csv, nom_csv),</span>
-<span id="cb17-70"><a href="#cb17-70" aria-hidden="true" tabindex="-1"></a>                           <span class="at">callback =</span> SideEffectChunkCallback<span class="sc">$</span><span class="fu">new</span>(write_chunk_to_parquet),</span>
-<span id="cb17-71"><a href="#cb17-71" aria-hidden="true" tabindex="-1"></a>                           <span class="at">chunk_size =</span> <span class="dv">1000000</span>L,</span>
-<span id="cb17-72"><a href="#cb17-72" aria-hidden="true" tabindex="-1"></a>                           <span class="at">col_types =</span> schema_readr)</span>
-<span id="cb17-73"><a href="#cb17-73" aria-hidden="true" tabindex="-1"></a>       }</span>
-<span id="cb17-74"><a href="#cb17-74" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readr)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>schema_readr <span class="ot">&lt;-</span> <span class="fu">cols_only</span>(</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLX_ANN_MOI =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">ORG_CLE_REG =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">AGE_BEN_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_RES_REG =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_CMU_TOP =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_QLT_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">BEN_SEX_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">DDP_SPE_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_CAT_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_REG_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_TYP_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETP_REG_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETP_CAT_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>  <span class="at">MDT_TYP_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">MFT_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_FJH_TYP =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_COG =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_NBR =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_ACT_QTE =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_DEP_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PAI_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_BSE =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-26"><a href="#cb16-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_COG =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-27"><a href="#cb16-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_NBR =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-28"><a href="#cb16-28" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_ACT_QTE =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-29"><a href="#cb16-29" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_PAI_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-30"><a href="#cb16-30" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_DEP_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-31"><a href="#cb16-31" aria-hidden="true" tabindex="-1"></a>  <span class="at">FLT_REM_MNT =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-32"><a href="#cb16-32" aria-hidden="true" tabindex="-1"></a>  <span class="at">SOI_ANN =</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb16-33"><a href="#cb16-33" aria-hidden="true" tabindex="-1"></a>  <span class="at">SOI_MOI =</span> <span class="fu">col_integer</span>(),</span>
+<span id="cb16-34"><a href="#cb16-34" aria-hidden="true" tabindex="-1"></a>  <span class="at">ASU_NAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-35"><a href="#cb16-35" aria-hidden="true" tabindex="-1"></a>  <span class="at">ATT_NAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-36"><a href="#cb16-36" aria-hidden="true" tabindex="-1"></a>  <span class="at">CPL_COD =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-37"><a href="#cb16-37" aria-hidden="true" tabindex="-1"></a>  <span class="at">CPT_ENV_TYP =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-38"><a href="#cb16-38" aria-hidden="true" tabindex="-1"></a>  <span class="at">DRG_AFF_NAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-39"><a href="#cb16-39" aria-hidden="true" tabindex="-1"></a>  <span class="at">ETE_IND_TAA =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-40"><a href="#cb16-40" aria-hidden="true" tabindex="-1"></a>  <span class="at">EXO_MTF =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-41"><a href="#cb16-41" aria-hidden="true" tabindex="-1"></a>  <span class="at">MTM_NAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-42"><a href="#cb16-42" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_NAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-43"><a href="#cb16-43" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PPU_SEC =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-44"><a href="#cb16-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_TAU =</span> <span class="fu">col_double</span>(),</span>
+<span id="cb16-45"><a href="#cb16-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_REM_TYP =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-46"><a href="#cb16-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRS_PDS_QCP =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-47"><a href="#cb16-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">EXE_INS_REG =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-48"><a href="#cb16-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_ACT_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-49"><a href="#cb16-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_ACT_CAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-50"><a href="#cb16-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_SPE_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-51"><a href="#cb16-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSE_STJ_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-52"><a href="#cb16-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">PRE_INS_REG =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-53"><a href="#cb16-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_ACT_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-54"><a href="#cb16-54" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_ACT_CAT =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-55"><a href="#cb16-55" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_SPE_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-56"><a href="#cb16-56" aria-hidden="true" tabindex="-1"></a>  <span class="at">PSP_STJ_SNDS =</span> <span class="fu">col_character</span>(),</span>
+<span id="cb16-57"><a href="#cb16-57" aria-hidden="true" tabindex="-1"></a>  <span class="at">TOP_PS5_TRG =</span> <span class="fu">col_character</span>()</span>
+<span id="cb16-58"><a href="#cb16-58" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-59"><a href="#cb16-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-60"><a href="#cb16-60" aria-hidden="true" tabindex="-1"></a><span class="fu">lapply</span>(<span class="fu">list.files</span>(input_csv),</span>
+<span id="cb16-61"><a href="#cb16-61" aria-hidden="true" tabindex="-1"></a>       <span class="cf">function</span>(nom_csv) {</span>
+<span id="cb16-62"><a href="#cb16-62" aria-hidden="true" tabindex="-1"></a>         annee <span class="ot">&lt;-</span> <span class="fu">substr</span>(nom_csv, <span class="dv">2</span>L, <span class="dv">5</span>L)</span>
+<span id="cb16-63"><a href="#cb16-63" aria-hidden="true" tabindex="-1"></a>         mois <span class="ot">&lt;-</span> <span class="fu">substr</span>(nom_csv, <span class="dv">6</span>L, <span class="dv">7</span>L)</span>
+<span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a>         dest_parquet <span class="ot">&lt;-</span> <span class="fu">file.path</span>(input_parquet, <span class="fu">paste0</span>(<span class="st">"annee="</span>, annee), <span class="fu">paste0</span>(<span class="st">"mois="</span>, mois))</span>
+<span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a>         <span class="fu">dir.create</span>(dest_parquet, <span class="at">recursive =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a>         write_chunk_to_parquet <span class="ot">&lt;-</span> <span class="cf">function</span>(x, pos)  {</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>           <span class="fu">write_parquet</span>(x, <span class="fu">file.path</span>(dest_parquet, <span class="fu">paste0</span>(<span class="fu">sprintf</span>(<span class="st">"%020d"</span>, pos), <span class="st">".parquet"</span>)))</span>
+<span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>         }</span>
+<span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>         <span class="fu">read_csv2_chunked</span>(<span class="at">file =</span> <span class="fu">file.path</span>(input_csv, nom_csv),</span>
+<span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>                           <span class="at">callback =</span> SideEffectChunkCallback<span class="sc">$</span><span class="fu">new</span>(write_chunk_to_parquet),</span>
+<span id="cb16-71"><a href="#cb16-71" aria-hidden="true" tabindex="-1"></a>                           <span class="at">chunk_size =</span> <span class="dv">1000000</span>L,</span>
+<span id="cb16-72"><a href="#cb16-72" aria-hidden="true" tabindex="-1"></a>                           <span class="at">col_types =</span> schema_readr)</span>
+<span id="cb16-73"><a href="#cb16-73" aria-hidden="true" tabindex="-1"></a>       }</span>
+<span id="cb16-74"><a href="#cb16-74" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>Il est à noter que l’on n’a pas chercher à optimiser le choix des types utilisés. Les <code>col_character()</code> utilisés pour les variables avec des modalités de type <code>"00"</code>, <code>"01"</code>, …, <code>"99"</code> pourraient aussi être encodés en <code>uint8()</code> de manière plus efficiente.</p>
 </div>
 </div>
 <p>Le réel apport d’Apache Acero concerne la notion de stream. La paresse des ExecPlan permet de dépendre de <em>plusieurs</em> fichiers <em>.parquet</em> qui ne sont pas encore chargés en mémoire, et dont la somme des tailles dépasserait largement la mémoire s’ils étaient chargés. Il permet de les gérer comme une table à travers une abstraction bien commode.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="ot">&lt;-</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="ot">&lt;-</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open_dataset</span>(emplacement_dataset) <span class="sc">%&gt;%</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">open_dataset</span>(emplacement_dataset) <span class="sc">%&gt;%</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">collect</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 84 x 3
 # Groups:   annee [7]
@@ -484,105 +487,107 @@ Tip
 <p>Il est possible d’appeler explicitement les filtres appropriés puis de charger le résultat au format d’une <em>table</em> <code>arrow</code> (qui doit tenir en mémoire). On veut montrer que cette approche est assez proche de l’utilisation d’une syntaxe dplyr agréable à l’usage et à l’oeil.</p>
 <p>Comparons et testons les deux approches.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="ot">&lt;-</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="ot">&lt;-</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bench)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(emplacement_dataset)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">avec_scan =</span> Scanner<span class="sc">$</span><span class="fu">create</span>(ds,</span>
-<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>                             <span class="at">filter =</span> Expression<span class="sc">$</span><span class="fu">field_ref</span>(<span class="st">"annee"</span>) <span class="sc">&lt;=</span> Expression<span class="sc">$</span><span class="fu">scalar</span>(<span class="dv">2020</span>),</span>
-<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>                             <span class="at">projection =</span> <span class="fu">c</span>(<span class="st">"annee"</span>, <span class="st">"mois"</span>, <span class="st">"FLT_PAI_MNT"</span>))<span class="sc">$</span></span>
-<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ToTable</span>() <span class="sc">%&gt;%</span></span>
-<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
-<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
-<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">sans_scan =</span> ds <span class="sc">%&gt;%</span></span>
-<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(annee <span class="sc">&lt;=</span> <span class="dv">2020</span>) <span class="sc">%&gt;%</span></span>
-<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(annee, mois, FLT_PAI_MNT) <span class="sc">%&gt;%</span></span>
-<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
-<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
-<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
-<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">iterations  =</span> <span class="dv">5</span>L,</span>
-<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb22-21"><a href="#cb22-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb22-22"><a href="#cb22-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
-<span id="cb22-23"><a href="#cb22-23" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
-<span id="cb22-24"><a href="#cb22-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(bench)</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(arrow)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>ds <span class="ot">&lt;-</span> <span class="fu">open_dataset</span>(emplacement_dataset)</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>bench<span class="sc">::</span><span class="fu">mark</span>(</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">avec_scan =</span> Scanner<span class="sc">$</span><span class="fu">create</span>(ds,</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>                             <span class="at">filter =</span> Expression<span class="sc">$</span><span class="fu">field_ref</span>(<span class="st">"annee"</span>) <span class="sc">&lt;=</span> Expression<span class="sc">$</span><span class="fu">scalar</span>(<span class="dv">2019</span>L),</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>                             <span class="at">projection =</span> <span class="fu">c</span>(<span class="st">"annee"</span>, <span class="st">"mois"</span>, <span class="st">"FLT_PAI_MNT"</span>))<span class="sc">$</span></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ToTable</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">sans_scan =</span> ds <span class="sc">%&gt;%</span></span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(annee <span class="sc">&lt;=</span> <span class="dv">2019</span>L) <span class="sc">%&gt;%</span></span>
+<span id="cb21-16"><a href="#cb21-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(annee, mois, FLT_PAI_MNT) <span class="sc">%&gt;%</span></span>
+<span id="cb21-17"><a href="#cb21-17" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(annee, mois) <span class="sc">%&gt;%</span></span>
+<span id="cb21-18"><a href="#cb21-18" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarise</span>(<span class="at">FLT_PAI_MNT =</span> <span class="fu">sum</span>(FLT_PAI_MNT)) <span class="sc">%&gt;%</span></span>
+<span id="cb21-19"><a href="#cb21-19" aria-hidden="true" tabindex="-1"></a>    <span class="fu">collect</span>(),</span>
+<span id="cb21-20"><a href="#cb21-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">iterations  =</span> <span class="dv">2</span>L,</span>
+<span id="cb21-21"><a href="#cb21-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">check =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-22"><a href="#cb21-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">memory =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-23"><a href="#cb21-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">filter_gc =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb21-24"><a href="#cb21-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">time_unit =</span> <span class="st">"ms"</span></span>
+<span id="cb21-25"><a href="#cb21-25" aria-hidden="true" tabindex="-1"></a>) <span class="sc">%&gt;%</span> <span class="fu">select</span>(expression, median) <span class="sc">%&gt;%</span></span>
+<span id="cb21-26"><a href="#cb21-26" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">expression =</span> <span class="fu">as.character</span>(expression))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2 x 2
   expression median
   &lt;chr&gt;       &lt;dbl&gt;
-1 avec_scan  67606.
-2 sans_scan  73278.</code></pre>
+1 avec_scan  52354.
+2 sans_scan  19964.</code></pre>
 </div>
 </div>
-<p>Il semble ici qu’en filtrant ou non, on obtient des performances similaires en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
+<p>Il semble ici qu’en filtrant ou non, on obtient des performances encore meilleures sans scan, en millisecondes. Nous pouvons par ailleurs avoir une estimation via C du débit de lecture.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inline)</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># C code pour lire un seul fichier et mesurer le temps</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>src <span class="ot">&lt;-</span> <span class="st">'</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">if(TYPEOF(path) != STRSXP || LENGTH(path) != 1)</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">    Rf_error("path must be character(1)");</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">const char *filepath = CHAR(STRING_ELT(path, 0));</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">size_t buffer_size = 4 * 1024 * 1024; // 4 MB</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">char *buffer = (char*) calloc(buffer_size, 1);</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="st">if(!buffer) Rf_error("Memory allocation failed");</span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a><span class="st">clock_t start = clock();</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="st">FILE *fp = fopen(filepath, "rb");</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="st">if(fp) {</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="st">    while(fread(buffer, 1, buffer_size, fp) &gt; 0) {</span></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="st">        // lecture uniquement</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="st">    fclose(fp);</span></span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
-<span id="cb24-22"><a href="#cb24-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-23"><a href="#cb24-23" aria-hidden="true" tabindex="-1"></a><span class="st">clock_t end = clock();</span></span>
-<span id="cb24-24"><a href="#cb24-24" aria-hidden="true" tabindex="-1"></a><span class="st">free(buffer);</span></span>
-<span id="cb24-25"><a href="#cb24-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-26"><a href="#cb24-26" aria-hidden="true" tabindex="-1"></a><span class="st">double read_time = (double)(end - start) / CLOCKS_PER_SEC;</span></span>
-<span id="cb24-27"><a href="#cb24-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-28"><a href="#cb24-28" aria-hidden="true" tabindex="-1"></a><span class="st">SEXP result = PROTECT(Rf_allocVector(REALSXP, 1));</span></span>
-<span id="cb24-29"><a href="#cb24-29" aria-hidden="true" tabindex="-1"></a><span class="st">REAL(result)[0] = read_time;</span></span>
-<span id="cb24-30"><a href="#cb24-30" aria-hidden="true" tabindex="-1"></a><span class="st">UNPROTECT(1);</span></span>
-<span id="cb24-31"><a href="#cb24-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-32"><a href="#cb24-32" aria-hidden="true" tabindex="-1"></a><span class="st">return result;</span></span>
-<span id="cb24-33"><a href="#cb24-33" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
-<span id="cb24-34"><a href="#cb24-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-35"><a href="#cb24-35" aria-hidden="true" tabindex="-1"></a>includes <span class="ot">=</span> <span class="st">"</span></span>
-<span id="cb24-36"><a href="#cb24-36" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;R.h&gt;</span></span>
-<span id="cb24-37"><a href="#cb24-37" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;Rinternals.h&gt;</span></span>
-<span id="cb24-38"><a href="#cb24-38" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;stdio.h&gt;</span></span>
-<span id="cb24-39"><a href="#cb24-39" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;stdlib.h&gt;</span></span>
-<span id="cb24-40"><a href="#cb24-40" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;string.h&gt;</span></span>
-<span id="cb24-41"><a href="#cb24-41" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;time.h&gt;</span></span>
-<span id="cb24-42"><a href="#cb24-42" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
-<span id="cb24-43"><a href="#cb24-43" aria-hidden="true" tabindex="-1"></a>read_file_time <span class="ot">&lt;-</span> <span class="fu">cfunction</span>(<span class="fu">signature</span>(<span class="at">path =</span> <span class="st">"character"</span>), src, <span class="at">includes =</span> includes)</span>
-<span id="cb24-44"><a href="#cb24-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-45"><a href="#cb24-45" aria-hidden="true" tabindex="-1"></a>read_dir_time <span class="ot">&lt;-</span> <span class="cf">function</span>(dir) {</span>
-<span id="cb24-46"><a href="#cb24-46" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(dir, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb24-47"><a href="#cb24-47" aria-hidden="true" tabindex="-1"></a>  total_time <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb24-48"><a href="#cb24-48" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-49"><a href="#cb24-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(f <span class="cf">in</span> files) {</span>
-<span id="cb24-50"><a href="#cb24-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">file.info</span>(f)<span class="sc">$</span>isdir) {</span>
-<span id="cb24-51"><a href="#cb24-51" aria-hidden="true" tabindex="-1"></a>      total_time <span class="ot">&lt;-</span> total_time <span class="sc">+</span> <span class="fu">read_dir_time</span>(f)</span>
-<span id="cb24-52"><a href="#cb24-52" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
-<span id="cb24-53"><a href="#cb24-53" aria-hidden="true" tabindex="-1"></a>      total_time <span class="ot">&lt;-</span> total_time <span class="sc">+</span> <span class="fu">read_file_time</span>(f)</span>
-<span id="cb24-54"><a href="#cb24-54" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb24-55"><a href="#cb24-55" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb24-56"><a href="#cb24-56" aria-hidden="true" tabindex="-1"></a>  </span>
-<span id="cb24-57"><a href="#cb24-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(total_time)</span>
-<span id="cb24-58"><a href="#cb24-58" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb24-59"><a href="#cb24-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-60"><a href="#cb24-60" aria-hidden="true" tabindex="-1"></a>temps_total <span class="ot">&lt;-</span> <span class="fu">read_dir_time</span>(emplacement_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(inline)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># C code pour lire un seul fichier et mesurer le temps</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>src <span class="ot">&lt;-</span> <span class="st">'</span></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="st">if(TYPEOF(path) != STRSXP || LENGTH(path) != 1)</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="st">    Rf_error("path must be character(1)");</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="st">const char *filepath = CHAR(STRING_ELT(path, 0));</span></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="st">size_t buffer_size = 4 * 1024 * 1024; // 4 MB</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="st">char *buffer = (char*) calloc(buffer_size, 1);</span></span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a><span class="st">if(!buffer) Rf_error("Memory allocation failed");</span></span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a><span class="st">clock_t start = clock();</span></span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a><span class="st">FILE *fp = fopen(filepath, "rb");</span></span>
+<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a><span class="st">if(fp) {</span></span>
+<span id="cb23-17"><a href="#cb23-17" aria-hidden="true" tabindex="-1"></a><span class="st">    while(fread(buffer, 1, buffer_size, fp) &gt; 0) {</span></span>
+<span id="cb23-18"><a href="#cb23-18" aria-hidden="true" tabindex="-1"></a><span class="st">        // lecture uniquement</span></span>
+<span id="cb23-19"><a href="#cb23-19" aria-hidden="true" tabindex="-1"></a><span class="st">    }</span></span>
+<span id="cb23-20"><a href="#cb23-20" aria-hidden="true" tabindex="-1"></a><span class="st">    fclose(fp);</span></span>
+<span id="cb23-21"><a href="#cb23-21" aria-hidden="true" tabindex="-1"></a><span class="st">}</span></span>
+<span id="cb23-22"><a href="#cb23-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-23"><a href="#cb23-23" aria-hidden="true" tabindex="-1"></a><span class="st">clock_t end = clock();</span></span>
+<span id="cb23-24"><a href="#cb23-24" aria-hidden="true" tabindex="-1"></a><span class="st">free(buffer);</span></span>
+<span id="cb23-25"><a href="#cb23-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-26"><a href="#cb23-26" aria-hidden="true" tabindex="-1"></a><span class="st">double read_time = (double)(end - start) / CLOCKS_PER_SEC;</span></span>
+<span id="cb23-27"><a href="#cb23-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-28"><a href="#cb23-28" aria-hidden="true" tabindex="-1"></a><span class="st">SEXP result = PROTECT(Rf_allocVector(REALSXP, 1));</span></span>
+<span id="cb23-29"><a href="#cb23-29" aria-hidden="true" tabindex="-1"></a><span class="st">REAL(result)[0] = read_time;</span></span>
+<span id="cb23-30"><a href="#cb23-30" aria-hidden="true" tabindex="-1"></a><span class="st">UNPROTECT(1);</span></span>
+<span id="cb23-31"><a href="#cb23-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-32"><a href="#cb23-32" aria-hidden="true" tabindex="-1"></a><span class="st">return result;</span></span>
+<span id="cb23-33"><a href="#cb23-33" aria-hidden="true" tabindex="-1"></a><span class="st">'</span></span>
+<span id="cb23-34"><a href="#cb23-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-35"><a href="#cb23-35" aria-hidden="true" tabindex="-1"></a>includes <span class="ot">=</span> <span class="st">"</span></span>
+<span id="cb23-36"><a href="#cb23-36" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;R.h&gt;</span></span>
+<span id="cb23-37"><a href="#cb23-37" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;Rinternals.h&gt;</span></span>
+<span id="cb23-38"><a href="#cb23-38" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;stdio.h&gt;</span></span>
+<span id="cb23-39"><a href="#cb23-39" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;stdlib.h&gt;</span></span>
+<span id="cb23-40"><a href="#cb23-40" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;string.h&gt;</span></span>
+<span id="cb23-41"><a href="#cb23-41" aria-hidden="true" tabindex="-1"></a><span class="st">#include &lt;time.h&gt;</span></span>
+<span id="cb23-42"><a href="#cb23-42" aria-hidden="true" tabindex="-1"></a><span class="st">"</span></span>
+<span id="cb23-43"><a href="#cb23-43" aria-hidden="true" tabindex="-1"></a>read_file_time <span class="ot">&lt;-</span> <span class="fu">cfunction</span>(<span class="fu">signature</span>(<span class="at">path =</span> <span class="st">"character"</span>), src, <span class="at">includes =</span> includes)</span>
+<span id="cb23-44"><a href="#cb23-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-45"><a href="#cb23-45" aria-hidden="true" tabindex="-1"></a>read_dir_time <span class="ot">&lt;-</span> <span class="cf">function</span>(dir) {</span>
+<span id="cb23-46"><a href="#cb23-46" aria-hidden="true" tabindex="-1"></a>  files <span class="ot">&lt;-</span> <span class="fu">list.files</span>(dir, <span class="at">full.names =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb23-47"><a href="#cb23-47" aria-hidden="true" tabindex="-1"></a>  total_time <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb23-48"><a href="#cb23-48" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-49"><a href="#cb23-49" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span>(f <span class="cf">in</span> files) {</span>
+<span id="cb23-50"><a href="#cb23-50" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span>(<span class="fu">file.info</span>(f)<span class="sc">$</span>isdir) {</span>
+<span id="cb23-51"><a href="#cb23-51" aria-hidden="true" tabindex="-1"></a>      total_time <span class="ot">&lt;-</span> total_time <span class="sc">+</span> <span class="fu">read_dir_time</span>(f)</span>
+<span id="cb23-52"><a href="#cb23-52" aria-hidden="true" tabindex="-1"></a>    } <span class="cf">else</span> {</span>
+<span id="cb23-53"><a href="#cb23-53" aria-hidden="true" tabindex="-1"></a>      total_time <span class="ot">&lt;-</span> total_time <span class="sc">+</span> <span class="fu">read_file_time</span>(f)</span>
+<span id="cb23-54"><a href="#cb23-54" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb23-55"><a href="#cb23-55" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb23-56"><a href="#cb23-56" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb23-57"><a href="#cb23-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">return</span>(total_time)</span>
+<span id="cb23-58"><a href="#cb23-58" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb23-59"><a href="#cb23-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-60"><a href="#cb23-60" aria-hidden="true" tabindex="-1"></a>temps_total <span class="ot">&lt;-</span> <span class="fu">read_dir_time</span>(emplacement_dataset)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>Lire l’intégralité des fichiers parquet dans C sans même dure 249.491 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l’on observe <a href="https://arrow.apache.org/docs/r/articles/dataset.html">dans la documentation R d’arrow</a>.</p>
+<p>Lire l’intégralité des fichiers parquet dans C sans même dure 74.67 secondes. Cela semble prouver que l’exécution des <code>ExecPlan</code> est naturellement parcimonieuse. En fait, on trouve la confirmation de ce que l’on observe <a href="https://arrow.apache.org/docs/r/articles/dataset.html">dans la documentation R d’arrow</a>.</p>
 <blockquote class="blockquote">
 <p>Second, all work is pushed down to the individual data files, and depending on the file format, chunks of data within files. As a result, you can select a subset of data from a much larger data set by collecting the smaller slices from each file: you don’t have to load the whole data set in memory to slice from it.</p>
 </blockquote>

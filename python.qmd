@@ -1,7 +1,6 @@
 ---
 title: "Démonstration Apache Arrow en Python"
 format: html
-jupyter: python3
 ---
 
 # Introduction
@@ -32,13 +31,14 @@ print(sorted_table)
 
 # Traitement d'un fichier Parquet trop grand pour la mémoire
 
-```python
+```{python}
+#| eval: false
 import pyarrow.dataset as ds
 import pyarrow.compute as pc
 import pandas as pd
 
 # Charger un dataset Parquet
-parquet_file = "C:\\Users\\trigaud\\Documents\\DEV\\DemoArrow\\openamir_webinaire_arrow" 
+parquet_file = "Path/to/parquet" 
 dataset = ds.dataset(parquet_file, format="parquet", partitioning="hive")
 
 # Appliquer des filtres et des agrégations

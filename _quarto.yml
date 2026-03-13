@@ -14,6 +14,8 @@ website:
         text: Immutabilité
       - href: paresse.qmd
         text: Évaluation paresseuse
+      - href: python.qmd
+        text: Démonstration Apache Arrow en Python
     search: false
 
 format:
