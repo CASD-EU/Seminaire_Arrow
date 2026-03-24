@@ -135,3 +135,33 @@ On peut l'exécuter à l'aide de la fonction `to_table()`.
 pandas_df = table.to_pandas()
 print(pandas_df)
 ```
+
+## Version polars
+
+```{python}
+import polars as pl
+
+plan = (
+    pl.scan_parquet(emplacement_dataset)
+    .select(["FLT_PAI_MNT", "annee", "mois"])
+    .group_by(["annee", "mois"])
+    .agg(pl.col("FLT_PAI_MNT").sum())
+)
+print(plan)
+```
+
+L'on peut également utiliser polars en backend, qui est un moteur alternatif, basé sur le format de donnée `arrow`, mais qui utilise un moteur alternatif à Acero pour exécuter ses requêtes.
+
+Comme Acero, Polars attend qu'on lui ordonne d'exécuter ses requêtes.
+
+Comme sous Acero, on peut éviter de tout charger en mémoire d'un seul coup sous Polars. Il faut pour cela préciser qu'on utilise l'engine "streaming".
+
+```{python}
+plan.collect(engine="streaming")
+```
+
+Dès lors que l'on atteint la dizaine de secondes pour des requêtes d'études statistiques, l'on peut se dire que l'objectif est rempli et que le benchmark comparatif n'importe pas beaucoup pour des chercheurs. Si l'on reste dans le cadre de requêtes accomplies par l'homme, l'important est la **lisibilité du frontend** ainsi que la **stabilité du framework**. De ce point de vue, l'implémentation R d'Acero que l'on a précédemment vue, est très satisfaisante (et a l'avantage d'être maintenue par Apache).
+
+Il est clair que, contrairement à l'implémentation R d'Acero, la lisibilité d'`ExecPlan` sous `pyarrow` est assez moyenne (ça reste quelque chose d'assez bas niveau).
+
+Dans ce contexte, polars est sans doute un bon apport à la data-analyse en Python. Elle apporte l'équivalent de `open_dataset()` en Python, à savoir une interface sous la forme de pipelines.
