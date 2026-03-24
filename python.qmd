@@ -7,6 +7,7 @@ execute:
 
 ```{python}
 #| tags: [parameters]
+#| echo: false
 
 chemin_dataset = "C:\\Users\\afeldmann\\Desktop\\openamir"
 ```

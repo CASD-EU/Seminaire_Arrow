@@ -8,3 +8,4 @@
 *.parquet
 
 /_site/
+/.ipynb_checkpoints/
