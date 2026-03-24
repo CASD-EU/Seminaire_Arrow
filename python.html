@@ -183,6 +183,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#la-lazy-evaluation" id="toc-la-lazy-evaluation" class="nav-link" data-scroll-target="#la-lazy-evaluation">La lazy evaluation :</a></li>
   <li><a href="#faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero" id="toc-faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero" class="nav-link" data-scroll-target="#faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero">Faire une aggregation sur une table dépassant la mémoire avec Acero :</a></li>
   <li><a href="#conversion-en-pandas" id="toc-conversion-en-pandas" class="nav-link" data-scroll-target="#conversion-en-pandas">Conversion en pandas</a></li>
+  <li><a href="#version-polars" id="toc-version-polars" class="nav-link" data-scroll-target="#version-polars">Version polars</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -216,14 +217,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Comment charger un fichier CSV en mémoire avec Arrow et effectuer un tri.</li>
 <li>Comment utiliser l’API <code>pyarrow.dataset</code> pour travailler avec un fichier Parquet trop grand pour la mémoire, appliquer des filtres et des agrégations, et convertir les résultats en un DataFrame Pandas.</li>
 </ol>
-<div id="d6b5374e" class="cell" data-execution_count="3">
+<div id="d7df6aed" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pyarrow</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pandas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
 <section id="chargement-dun-fichier-csv-avec-arrow" class="level1">
 <h1>Chargement d’un fichier CSV avec Arrow</h1>
-<div id="b9872bbf" class="cell" data-execution_count="4">
+<div id="3fa2bf03" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.csv <span class="im">as</span> csv</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>csv_file <span class="op">=</span> <span class="st">"data1.csv"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> csv.read_csv(csv_file)</span>
@@ -255,15 +256,15 @@ user_id: [[89,45,60,41,11,...,75,99,35,83,10]]</code></pre>
 </section>
 <section id="traitement-dun-fichier-parquet-trop-grand-pour-la-mémoire" class="level1">
 <h1>Traitement d’un fichier Parquet trop grand pour la mémoire</h1>
-<div id="08132a7f" class="cell" data-execution_count="5">
+<div id="069cfb79" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.compute <span class="im">as</span> pc</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="00effc1c" class="cell" data-execution_count="7">
+<div id="786b0e2a" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="op">=</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="ff9340ba" class="cell" data-execution_count="8">
+<div id="604f251c" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> ds.dataset(emplacement_dataset, <span class="bu">format</span><span class="op">=</span><span class="st">"parquet"</span>, partitioning<span class="op">=</span><span class="st">"hive"</span>)</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Appliquer des filtres et des agrégations</span></span>
@@ -272,7 +273,7 @@ user_id: [[89,45,60,41,11,...,75,99,35,83,10]]</code></pre>
 <section id="la-lazy-evaluation" class="level2">
 <h2 class="anchored" data-anchor-id="la-lazy-evaluation">La lazy evaluation :</h2>
 <p>Le code de la cellule précédente était instantanée et celui qui vient produit un résultat, il va donc le déclencher</p>
-<div id="36192d58" class="cell" data-execution_count="9">
+<div id="7444f0ed" class="cell" data-execution_count="9">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>filtered.count_rows()</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>filtered.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -351,7 +352,7 @@ ETE_REG_COD: [["24","99","99","52","11",...,"99","99","52","99","99"]]
 </section>
 <section id="faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero" class="level2">
 <h2 class="anchored" data-anchor-id="faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero">Faire une aggregation sur une table dépassant la mémoire avec Acero :</h2>
-<div id="00181567" class="cell" data-execution_count="10">
+<div id="3fb05151" class="cell" data-execution_count="10">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.acero <span class="im">as</span> acero</span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.compute <span class="im">as</span> pc</span>
@@ -391,7 +392,7 @@ ETE_REG_COD: [["24","99","99","52","11",...,"99","99","52","99","99"]]
 <span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>[plan]</span>
 <span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="9af17c46" class="cell" data-execution_count="11">
+<div id="a34ac477" class="cell" data-execution_count="11">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>plan</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="8">
 <pre><code>&lt;pyarrow.acero.Declaration&gt;
@@ -405,7 +406,7 @@ ExecPlan with 4 nodes:
 </div>
 </div>
 <p>Pour l’instant, c’est une requête, qui fait exactement la même requête que celle que nous avions sous R auparavant.</p>
-<div id="b4969699" class="cell" data-execution_count="12">
+<div id="42801282" class="cell" data-execution_count="12">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> plan.to_table()</span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -416,14 +417,14 @@ FLT_PAI_MNT: double
 ----
 annee: [[2018,2018,2018,2018,2018,...,2024,2024,2024,2024,2024]]
 mois: [[1,2,3,4,5,...,8,9,10,11,12]]
-FLT_PAI_MNT: [[1.1449685652927168e+10,1.0650381771494213e+10,1.1552585152688421e+10,1.1526760891297972e+10,1.1030467262340118e+10,...,1.1074975306812721e+10,1.3362059430379286e+10,1.555508774162697e+10,1.3508940256072485e+10,1.4659206975157482e+10]]</code></pre>
+FLT_PAI_MNT: [[1.1449685652926868e+10,1.065038177149411e+10,1.1552585152688337e+10,1.1526760891298946e+10,1.103046726233994e+10,...,1.1074975306813257e+10,1.3362059430379148e+10,1.5555087741629133e+10,1.3508940256072182e+10,1.4659206975157743e+10]]</code></pre>
 </div>
 </div>
 <p>On peut l’exécuter à l’aide de la fonction <code>to_table()</code>.</p>
 </section>
 <section id="conversion-en-pandas" class="level2">
 <h2 class="anchored" data-anchor-id="conversion-en-pandas">Conversion en pandas</h2>
-<div id="2fbf0682" class="cell" data-execution_count="13">
+<div id="fc02d0bd" class="cell" data-execution_count="13">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir en DataFrame Pandas</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>pandas_df <span class="op">=</span> table.to_pandas()</span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pandas_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -444,6 +445,34 @@ FLT_PAI_MNT: [[1.1449685652927168e+10,1.0650381771494213e+10,1.1552585152688421e
 [84 rows x 3 columns]</code></pre>
 </div>
 </div>
+</section>
+<section id="version-polars" class="level2">
+<h2 class="anchored" data-anchor-id="version-polars">Version polars</h2>
+<div id="34202804" class="cell" data-execution_count="14">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> polars <span class="im">as</span> pl</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>resultat <span class="op">=</span> (</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>    pl.scan_parquet(emplacement_dataset)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    .select([<span class="st">"FLT_PAI_MNT"</span>, <span class="st">"annee"</span>, <span class="st">"mois"</span>])</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    .group_by([<span class="st">"annee"</span>, <span class="st">"mois"</span>])</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    .agg(pl.col(<span class="st">"FLT_PAI_MNT"</span>).<span class="bu">sum</span>())</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(resultat)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>naive plan: (run LazyFrame.explain(optimized=True) to see the optimized plan)
+
+AGGREGATE[maintain_order: false]
+  [col("FLT_PAI_MNT").sum()] BY [col("annee"), col("mois")]
+  FROM
+  SELECT [col("FLT_PAI_MNT"), col("annee"), col("mois")]
+    Parquet SCAN [C:/Users/afeldmann/Desktop/openamir/annee=2018/mois=01/00000000000000000001.parquet, ... 2952 other sources]
+    PROJECT */57 COLUMNS
+    ESTIMATED ROWS: 2953000000</code></pre>
+</div>
+</div>
+<p>L’on peut également utiliser polars en backend, qui est un moteur alternatif, basé sur le format de donnée <code>arrow</code>, mais qui utilise un moteur alternatif à Acero pour exécuter ses requêtes.</p>
+<p>Dès lors que l’on atteint la dizaine de secondes pour des requêtes d’études statistiques, l’on peut se dire que l’objectif est rempli et que le benchmark comparatif n’importe pas beaucoup pour des chercheurs. Si l’on reste dans le cadre de requêtes accomplies par l’homme, l’important est la <strong>lisibilité du frontend</strong>. Il est clair que, contrairement à l’implémentation R d’Acero, la lisibilité de pyarrow est assez moyenne (ça reste quelque chose d’assez bas niveau).</p>
+<p>Dans ce contexte, polars est sans doute un bon apport à la data-analyse en Python. Elle apporte l’équivalent de <code>open_dataset()</code> en Python, à savoir une interface sous la forme de pipelines.</p>
 
 
 </section>
