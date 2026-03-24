@@ -209,6 +209,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
+<div id="7c0199f7" class="cell" data-tags="[&quot;parameters&quot;]" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>chemin_dataset <span class="op">=</span> <span class="st">"C:</span><span class="ch">\\</span><span class="st">Users</span><span class="ch">\\</span><span class="st">afeldmann</span><span class="ch">\\</span><span class="st">Desktop</span><span class="ch">\\</span><span class="st">openamir"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 <section id="introduction" class="level1">
 <h1>Introduction</h1>
 <p>Dans cette démonstration, nous allons explorer comment Apache Arrow peut être utilisé pour traiter des fichiers CSV et Parquet, même lorsque ces derniers sont trop volumineux pour tenir en mémoire. Nous allons montrer :</p>
@@ -216,68 +219,234 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li>Comment charger un fichier CSV en mémoire avec Arrow et effectuer un tri.</li>
 <li>Comment utiliser l’API <code>pyarrow.dataset</code> pour travailler avec un fichier Parquet trop grand pour la mémoire, appliquer des filtres et des agrégations, et convertir les résultats en un DataFrame Pandas.</li>
 </ol>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pyarrow</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pandas</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.csv <span class="im">as</span> csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="c1607818" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pyarrow</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="op">!</span> pip install pandas</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 </section>
 <section id="chargement-dun-fichier-csv-avec-arrow" class="level1">
 <h1>Chargement d’un fichier CSV avec Arrow</h1>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>csv_file <span class="op">=</span> <span class="st">"data1.csv"</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> csv.read_csv(csv_file)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Trier les données par une colonne spécifique</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>sorted_table <span class="op">=</span> table.sort_by(<span class="st">"name"</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sorted_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="e900ae4d" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.csv <span class="im">as</span> csv</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>csv_file <span class="op">=</span> <span class="st">"data1.csv"</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> csv.read_csv(csv_file)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Trier les données par une colonne spécifique</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>sorted_table <span class="op">=</span> table.sort_by(<span class="st">"name"</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sorted_table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pyarrow.Table
+name: string
+phone: string
+email: string
+postalZip: string
+Salary: string
+country: string
+age: int64
+user_id: int64
+----
+name: [["Abbot Chang","Adara Sanchez","Aileen O'Neill","Aretha Chen","Ashton Castaneda",...,"Walter Wiggins","Whilemina Nielsen","William Morse","Winter Luna","Wyoming Kelly"]]
+phone: [["06 40 44 38 71","01 66 30 28 05","05 87 31 31 53","09 56 23 98 48","03 44 66 36 63",...,"08 04 23 36 41","01 06 54 85 38","03 23 95 87 15","09 84 18 87 87","06 28 66 68 61"]]
+email: [["vitae@hotmail.edu","metus.vitae@google.net","cursus.et@hotmail.ca","cum.sociis.natoque@hotmail.edu","vehicula@icloud.edu",...,"mollis.non@icloud.org","curabitur@google.net","magna.phasellus@hotmail.couk","mauris.vestibulum@google.edu","cursus.nunc.mauris@outlook.net"]]
+postalZip: [["18986","75641","U1V 1IS","3667","37215",...,"587379","5273 UF","46315","5887","2731"]]
+Salary: [["$5,689","$7,095","$8,079","$7,624","$5,068",...,"$5,948","$6,524","$6,032","$5,854","$6,466"]]
+country: [["Germany","Austria","Italy","Canada","Sweden",...,"Singapore","Spain","Vietnam","Poland","Germany"]]
+age: [[34,21,86,55,55,...,39,74,46,40,23]]
+user_id: [[89,45,60,41,11,...,75,99,35,83,10]]</code></pre>
+</div>
+</div>
 </section>
 <section id="traitement-dun-fichier-parquet-trop-grand-pour-la-mémoire" class="level1">
 <h1>Traitement d’un fichier Parquet trop grand pour la mémoire</h1>
-<div id="b2034343" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.compute <span class="im">as</span> pc</span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Charger un dataset Parquet</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>parquet_file <span class="op">=</span> <span class="st">"Path/to/parquet"</span> </span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> ds.dataset(parquet_file, <span class="bu">format</span><span class="op">=</span><span class="st">"parquet"</span>, partitioning<span class="op">=</span><span class="st">"hive"</span>)</span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Appliquer des filtres et des agrégations</span></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>filtered <span class="op">=</span> dataset.<span class="bu">filter</span>(pc.field(<span class="st">"BEN_SEX_COD"</span>) <span class="op">==</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="0a442a78" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.compute <span class="im">as</span> pc</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="2d89122b" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>emplacement_dataset <span class="op">=</span> <span class="st">"[emplacement du dataset]"</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="5bfc2b37" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> ds.dataset(emplacement_dataset, <span class="bu">format</span><span class="op">=</span><span class="st">"parquet"</span>, partitioning<span class="op">=</span><span class="st">"hive"</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Appliquer des filtres et des agrégations</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>filtered <span class="op">=</span> dataset.<span class="bu">filter</span>(pc.field(<span class="st">"BEN_SEX_COD"</span>) <span class="op">==</span> <span class="st">"1"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <section id="la-lazy-evaluation" class="level2">
 <h2 class="anchored" data-anchor-id="la-lazy-evaluation">La lazy evaluation :</h2>
 <p>Le code de la cellule précédente était instantanée et celui qui vient produit un résultat, il va donc le déclencher</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>filtered.count_rows()</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>filtered.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="1968a865" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>filtered.count_rows()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>filtered.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="6">
+<pre><code>pyarrow.Table
+FLX_ANN_MOI: string
+ORG_CLE_REG: string
+AGE_BEN_SNDS: string
+BEN_RES_REG: string
+BEN_CMU_TOP: string
+BEN_QLT_COD: string
+BEN_SEX_COD: string
+DDP_SPE_COD: string
+ETE_CAT_SNDS: string
+ETE_REG_COD: string
+ETE_TYP_SNDS: string
+ETP_REG_COD: string
+ETP_CAT_SNDS: string
+MDT_TYP_COD: string
+MFT_COD: string
+PRS_FJH_TYP: string
+PRS_ACT_COG: double
+PRS_ACT_NBR: double
+PRS_ACT_QTE: double
+PRS_DEP_MNT: double
+PRS_PAI_MNT: double
+PRS_REM_BSE: double
+PRS_REM_MNT: double
+FLT_ACT_COG: double
+FLT_ACT_NBR: double
+FLT_ACT_QTE: double
+FLT_PAI_MNT: double
+FLT_DEP_MNT: double
+FLT_REM_MNT: double
+SOI_ANN: int32
+SOI_MOI: int32
+ASU_NAT: string
+ATT_NAT: string
+CPL_COD: string
+CPT_ENV_TYP: string
+DRG_AFF_NAT: string
+ETE_IND_TAA: string
+EXO_MTF: string
+MTM_NAT: string
+PRS_NAT: string
+PRS_PPU_SEC: string
+PRS_REM_TAU: double
+PRS_REM_TYP: string
+PRS_PDS_QCP: string
+EXE_INS_REG: string
+PSE_ACT_SNDS: string
+PSE_ACT_CAT: string
+PSE_SPE_SNDS: string
+PSE_STJ_SNDS: string
+PRE_INS_REG: string
+PSP_ACT_SNDS: string
+PSP_ACT_CAT: string
+PSP_SPE_SNDS: string
+PSP_STJ_SNDS: string
+TOP_PS5_TRG: string
+annee: int32
+mois: int32
+----
+FLX_ANN_MOI: [["201801","201801","201801","201801","201801",...,"201801","201801","201801","201801","201801"]]
+ORG_CLE_REG: [["24","11","75","52","11",...,"11","93","11","99","27"]]
+AGE_BEN_SNDS: [["60","70","30","40","80",...,"50","30","60","80","40"]]
+BEN_RES_REG: [["24","75","75","52","99",...,"76","93","11","93","27"]]
+BEN_CMU_TOP: [["9","9","9","9","9",...,"9","9","9","9","9"]]
+BEN_QLT_COD: [["1","1","1","1","1",...,"1","1","1","1","1"]]
+BEN_SEX_COD: [["1","1","1","1","1",...,"1","1","1","1","1"]]
+DDP_SPE_COD: [["0","0","0","0","0",...,"0","0","0","0","0"]]
+ETE_CAT_SNDS: [["1102","9999","9999","1102","1110",...,"9999","9999","2206","9999","9999"]]
+ETE_REG_COD: [["24","99","99","52","11",...,"99","99","52","99","99"]]
+...</code></pre>
+</div>
+</div>
 </section>
 <section id="faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero" class="level2">
 <h2 class="anchored" data-anchor-id="faire-une-aggregation-sur-une-table-dépassant-la-mémoire-avec-acero">Faire une aggregation sur une table dépassant la mémoire avec Acero :</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.acero <span class="im">as</span> acero</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>scan <span class="op">=</span> acero.Declaration(</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"scan"</span>,</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    acero.ScanNodeOptions(dataset)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>aggregate <span class="op">=</span> acero.Declaration(</span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="st">"aggregate"</span>,</span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    acero.AggregateNodeOptions(</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>        aggregates<span class="op">=</span>[(<span class="st">"FLT_PAI_MNT"</span>, <span class="st">"hash_sum"</span>, <span class="va">None</span>, <span class="st">"FLT_PAI_MNT2"</span>)],</span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>        keys<span class="op">=</span>[<span class="st">"annee"</span>, <span class="st">"mois"</span>]</span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    ),</span>
-<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>[scan]</span>
-<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> aggregate.to_table()</span>
-<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="72fc99d2" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.dataset <span class="im">as</span> ds</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.acero <span class="im">as</span> acero</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyarrow.compute <span class="im">as</span> pc</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>dataset <span class="op">=</span> ds.dataset(</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    emplacement_dataset,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">format</span><span class="op">=</span><span class="st">"parquet"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    partitioning<span class="op">=</span><span class="st">"hive"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>plan <span class="op">=</span> acero.Declaration(</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"scan"</span>,</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    acero.ScanNodeOptions(dataset, columns<span class="op">=</span>[<span class="st">"FLT_PAI_MNT"</span>, <span class="st">"annee"</span>, <span class="st">"mois"</span>])</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>plan <span class="op">=</span> acero.Declaration(</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    <span class="st">"project"</span>,</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    acero.ProjectNodeOptions(</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>        expressions<span class="op">=</span>[</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>            pc.field(<span class="st">"FLT_PAI_MNT"</span>),</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>            pc.field(<span class="st">"annee"</span>),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>            pc.field(<span class="st">"mois"</span>),</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>        names<span class="op">=</span>[<span class="st">"FLT_PAI_MNT"</span>, <span class="st">"annee"</span>, <span class="st">"mois"</span>]</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>[plan]</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>plan <span class="op">=</span> acero.Declaration(</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    <span class="st">"aggregate"</span>,</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    acero.AggregateNodeOptions(</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>        aggregates<span class="op">=</span>[</span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>            (<span class="st">"FLT_PAI_MNT"</span>, <span class="st">"hash_sum"</span>, pc.ScalarAggregateOptions(skip_nulls<span class="op">=</span><span class="va">False</span>, min_count<span class="op">=</span><span class="dv">0</span>), <span class="st">"FLT_PAI_MNT"</span>)</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>        ],</span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>        keys<span class="op">=</span>[<span class="st">"annee"</span>, <span class="st">"mois"</span>]</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>    ),</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>    inputs<span class="op">=</span>[plan]</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<div id="626faa06" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plan</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="8">
+<pre><code>&lt;pyarrow.acero.Declaration&gt;
+ExecPlan with 4 nodes:
+:ConsumingSinkNode{}
+  :GroupByNode{keys=["annee", "mois"], aggregates=[
+    hash_sum(FLT_PAI_MNT, {skip_nulls=false, min_count=0}),
+  ]}
+    :ProjectNode{projection=[FLT_PAI_MNT, annee, mois]}
+      :SourceNode{}</code></pre>
+</div>
+</div>
+<p>Pour l’instant, c’est une requête, qui fait exactement la même requête que celle que nous avions sous R auparavant.</p>
+<div id="6c96db69" class="cell" data-execution_count="12">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>table <span class="op">=</span> plan.to_table()</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(table)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>pyarrow.Table
+annee: int32
+mois: int32
+FLT_PAI_MNT: double
+----
+annee: [[2018,2018,2018,2018,2018,...,2024,2024,2024,2024,2024]]
+mois: [[1,2,3,4,5,...,8,9,10,11,12]]
+FLT_PAI_MNT: [[1.1449685652927036e+10,1.065038177149436e+10,1.1552585152687418e+10,1.1526760891299202e+10,1.1030467262340174e+10,...,1.1074975306812786e+10,1.3362059430379475e+10,1.555508774163573e+10,1.3508940256070768e+10,1.4659206975157757e+10]]</code></pre>
+</div>
+</div>
+<p>On peut l’exécuter à l’aide de la fonction <code>to_table()</code>.</p>
 </section>
 <section id="conversion-en-pandas" class="level2">
 <h2 class="anchored" data-anchor-id="conversion-en-pandas">Conversion en pandas</h2>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir en DataFrame Pandas</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>pandas_df <span class="op">=</span> table.to_pandas()</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pandas_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="cf9f3173" class="cell" data-execution_count="13">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Convertir en DataFrame Pandas</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>pandas_df <span class="op">=</span> table.to_pandas()</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(pandas_df)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    annee  mois   FLT_PAI_MNT
+0    2018     1  1.144969e+10
+1    2018     2  1.065038e+10
+2    2018     3  1.155259e+10
+3    2018     4  1.152676e+10
+4    2018     5  1.103047e+10
+..    ...   ...           ...
+79   2024     8  1.107498e+10
+80   2024     9  1.336206e+10
+81   2024    10  1.555509e+10
+82   2024    11  1.350894e+10
+83   2024    12  1.465921e+10
+
+[84 rows x 3 columns]</code></pre>
+</div>
+</div>
 
 
 </section>
@@ -357,7 +526,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp('/' + window.location.host + '/');
+        var filterRegex = new RegExp("https:\/\/CASD-EU\.github\.io\/Seminaire_Arrow\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
