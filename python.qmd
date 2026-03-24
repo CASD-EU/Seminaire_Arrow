@@ -1,7 +1,15 @@
 ---
 title: "Démonstration Apache Arrow en Python"
 format: html
+execute: 
+  cache: true
 ---
+
+```{python}
+#| tags: [parameters]
+
+chemin_dataset = "C:\\Users\\afeldmann\\Desktop\\openamir"
+```
 
 # Introduction
 
@@ -11,16 +19,16 @@ Dans cette démonstration, nous allons explorer comment Apache Arrow peut être 
 2. Comment utiliser l'API `pyarrow.dataset` pour travailler avec un fichier Parquet trop grand pour la mémoire, appliquer des filtres et des agrégations, et convertir les résultats en un DataFrame Pandas.
 
 
-```python
+```{python}
+#| eval: false
 ! pip install pyarrow
 ! pip install pandas
-
-import pyarrow.csv as csv
 ```
 
 # Chargement d'un fichier CSV avec Arrow
 
-```python
+```{python}
+import pyarrow.csv as csv
 csv_file = "data1.csv"
 table = csv.read_csv(csv_file)
 
@@ -32,14 +40,23 @@ print(sorted_table)
 # Traitement d'un fichier Parquet trop grand pour la mémoire
 
 ```{python}
-#| eval: false
 import pyarrow.dataset as ds
 import pyarrow.compute as pc
 import pandas as pd
+```
+```{python}
+#| echo: false
+#| results: false
+emplacement_dataset = chemin_dataset
+```
+```{python}
+#| echo: true
+#| eval: false
+emplacement_dataset = "[emplacement du dataset]"
+```
 
-# Charger un dataset Parquet
-parquet_file = "Path/to/parquet" 
-dataset = ds.dataset(parquet_file, format="parquet", partitioning="hive")
+```{python}
+dataset = ds.dataset(emplacement_dataset, format="parquet", partitioning="hive")
 
 # Appliquer des filtres et des agrégations
 filtered = dataset.filter(pc.field("BEN_SEX_COD") == "1")
@@ -49,39 +66,70 @@ filtered = dataset.filter(pc.field("BEN_SEX_COD") == "1")
 
 Le code de la cellule précédente était instantanée et celui qui vient produit un résultat, il va donc le déclencher
 
-```python
+```{python}
 filtered.count_rows()
 filtered.head(20)
 ```
 
 ## Faire une aggregation sur une table dépassant la mémoire avec Acero :
 
-```python
+```{python}
+import pyarrow.dataset as ds
 import pyarrow.acero as acero
+import pyarrow.compute as pc
 
-
-scan = acero.Declaration(
-    "scan",
-    acero.ScanNodeOptions(dataset)
+dataset = ds.dataset(
+    emplacement_dataset,
+    format="parquet",
+    partitioning="hive"
 )
 
-aggregate = acero.Declaration(
+plan = acero.Declaration(
+    "scan",
+    acero.ScanNodeOptions(dataset, columns=["FLT_PAI_MNT", "annee", "mois"])
+)
+
+plan = acero.Declaration(
+    "project",
+    acero.ProjectNodeOptions(
+        expressions=[
+            pc.field("FLT_PAI_MNT"),
+            pc.field("annee"),
+            pc.field("mois"),
+        ],
+        names=["FLT_PAI_MNT", "annee", "mois"]
+    ),
+    inputs=[plan]
+)
+
+plan = acero.Declaration(
     "aggregate",
     acero.AggregateNodeOptions(
-        aggregates=[("FLT_PAI_MNT", "hash_sum", None, "FLT_PAI_MNT2")],
+        aggregates=[
+            ("FLT_PAI_MNT", "hash_sum", pc.ScalarAggregateOptions(skip_nulls=False, min_count=0), "FLT_PAI_MNT")
+        ],
         keys=["annee", "mois"]
     ),
-    inputs=[scan]
+    inputs=[plan]
 )
+```
 
-table = aggregate.to_table()
+```{python}
+plan
+```
 
+Pour l'instant, c'est une requête, qui fait exactement la même requête que celle que nous avions sous R auparavant.
+
+```{python}
+table = plan.to_table()
 print(table)
 ```
 
+On peut l'exécuter à l'aide de la fonction `to_table()`.
+
 ## Conversion en pandas
 
-```python
+```{python}
 # Convertir en DataFrame Pandas
 pandas_df = table.to_pandas()
 print(pandas_df)
